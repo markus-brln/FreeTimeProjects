@@ -1,0 +1,24 @@
+This more or less follows: https://www.youtube.com/watch?v=WgZIv5HI44o
+
+Make an ssh key on your computer
+ssh-keygen -t rsa
+(just press enter (no email, no passphrase) until key has been generated
+
+
+Start ssh agent (should output "Agent pid <someNumber>")
+eval $(ssh-agent -s)
+
+
+Add ssh key to default location
+ssh-add ~/.ssh/id_rsa
+
+
+Link your ssh key to your github account (copy-paste public key from ~/.ssh/id_rsa)
+github profile -> Settings -> SSH and GPG keys -> add new ssh key
+
+
+Download the repository
+git clone <repo link>
+(confirm that you want to continue connecting)
+
+try git status etc.
