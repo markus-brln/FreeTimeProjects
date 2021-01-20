@@ -23,7 +23,8 @@ int main() {
 		}
 	}
 	
-	cout << "The message is:\n" << message;
+	cout << "The message is:\n" << message << "\nPress Enter to exit the program.\n";
+	cin.ignore();
 	
 	
 	
