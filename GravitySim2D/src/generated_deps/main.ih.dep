@@ -1,0 +1,10 @@
+main.ih.gch: main.ih gravitysim/gravitysim.h gravitysim/../utils/utils.h \
+ gravitysim/../utils/../raytracerandfriends/triple.h \
+ gravitysim/../utils/../raytracerandfriends/json/json_fwd.h \
+ controller/controller.h controller/../gravitysim/gravitysim.h
+gravitysim/gravitysim.h:
+gravitysim/../utils/utils.h:
+gravitysim/../utils/../raytracerandfriends/triple.h:
+gravitysim/../utils/../raytracerandfriends/json/json_fwd.h:
+controller/controller.h:
+controller/../gravitysim/gravitysim.h:

@@ -1,0 +1,9 @@
+#include "gravitysim.h"
+
+#include <iostream>
+#include <vector>
+#include "../utils/utils.h"
+
+using namespace std;
+using namespace sf;
+
