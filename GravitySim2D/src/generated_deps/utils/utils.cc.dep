@@ -1,6 +1,0 @@
-utils/utils.o: utils/utils.cc utils/utils.h \
- utils/../raytracerandfriends/triple.h \
- utils/../raytracerandfriends/json/json_fwd.h
-utils/utils.h:
-utils/../raytracerandfriends/triple.h:
-utils/../raytracerandfriends/json/json_fwd.h:

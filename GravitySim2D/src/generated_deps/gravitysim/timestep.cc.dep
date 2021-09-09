@@ -1,9 +1,0 @@
-gravitysim/timestep.o: gravitysim/timestep.cc gravitysim/gravitysim.ih.gch \
- gravitysim/gravitysim.h gravitysim/../utils/utils.h \
- gravitysim/../utils/../raytracerandfriends/triple.h \
- gravitysim/../utils/../raytracerandfriends/json/json_fwd.h
-gravitysim/gravitysim.ih:
-gravitysim/gravitysim.h:
-gravitysim/../utils/utils.h:
-gravitysim/../utils/../raytracerandfriends/triple.h:
-gravitysim/../utils/../raytracerandfriends/json/json_fwd.h:
