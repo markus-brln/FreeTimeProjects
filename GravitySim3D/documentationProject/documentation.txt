@@ -1,0 +1,12 @@
+Gravity Simulation Project
+
+8 September 2021
+- setup of the gui from what I did in the CG competition
+- 2D direct rendering based on coordinates
+- simple phyisics, not realistic
+- Stars as objects with position, motion vector and mass
+
+9 September 2021
+- using some of the raytracing code to construct a Quad 
+  to intersect rays between eye and stars, 3D rendering
+- fixed the coordinatesystem + camera

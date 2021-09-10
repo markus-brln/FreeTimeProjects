@@ -1,0 +1,16 @@
+main.o: main.cc main.ih.gch gravitysim3D/gravitysim3D.h \
+ gravitysim3D/../utils/utils.h gravitysim3D/../utils/raytracing/triple.h \
+ gravitysim3D/../utils/raytracing/../json/json_fwd.h \
+ controller/controller.h controller/../gravitysim3D/gravitysim3D.h \
+ controller/../view3D/view3D.h \
+ controller/../view3D/../gravitysim3D/gravitysim3D.h view3D/view3D.h
+main.ih:
+gravitysim3D/gravitysim3D.h:
+gravitysim3D/../utils/utils.h:
+gravitysim3D/../utils/raytracing/triple.h:
+gravitysim3D/../utils/raytracing/../json/json_fwd.h:
+controller/controller.h:
+controller/../gravitysim3D/gravitysim3D.h:
+controller/../view3D/view3D.h:
+controller/../view3D/../gravitysim3D/gravitysim3D.h:
+view3D/view3D.h:

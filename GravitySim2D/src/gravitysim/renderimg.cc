@@ -1,6 +1,6 @@
 #include "gravitysim.ih"
 
-void Gravitysim::renderImg(Image &img)
+void Gravitysim3D::renderImg(Image &img)
 {
     for (Star star : d_stars)
     {

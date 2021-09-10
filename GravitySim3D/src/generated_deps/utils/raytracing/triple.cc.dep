@@ -1,0 +1,6 @@
+utils/raytracing/triple.o: utils/raytracing/triple.cc \
+ utils/raytracing/triple.h utils/raytracing/../json/json_fwd.h \
+ utils/raytracing/../json/json.h
+utils/raytracing/triple.h:
+utils/raytracing/../json/json_fwd.h:
+utils/raytracing/../json/json.h:

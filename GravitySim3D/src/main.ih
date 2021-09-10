@@ -1,0 +1,8 @@
+#include "gravitysim3D/gravitysim3D.h"
+#include "controller/controller.h"
+#include "view3D/view3D.h"
+#include <SFML/Graphics.hpp>
+#include <omp.h>
+
+
+using namespace std;

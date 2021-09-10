@@ -1,7 +1,7 @@
 #include "gravitysim.ih"
 
 
-void Gravitysim::timestep()
+void Gravitysim3D::timestep()
 {
     vector<Star> movedStars = d_stars;
 

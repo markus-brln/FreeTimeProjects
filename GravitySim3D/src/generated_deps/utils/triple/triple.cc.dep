@@ -1,0 +1,5 @@
+utils/triple/triple.o: utils/triple/triple.cc utils/triple/triple.h \
+ utils/triple/../json/json_fwd.h utils/triple/../json/json.h
+utils/triple/triple.h:
+utils/triple/../json/json_fwd.h:
+utils/triple/../json/json.h:

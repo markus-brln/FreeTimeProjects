@@ -1,0 +1,10 @@
+utils/raytracing/quad.o: utils/raytracing/quad.cc utils/raytracing/quad.h \
+ utils/raytracing/object.h utils/raytracing/hit.h \
+ utils/raytracing/triple.h utils/raytracing/../json/json_fwd.h \
+ utils/raytracing/ray.h
+utils/raytracing/quad.h:
+utils/raytracing/object.h:
+utils/raytracing/hit.h:
+utils/raytracing/triple.h:
+utils/raytracing/../json/json_fwd.h:
+utils/raytracing/ray.h:

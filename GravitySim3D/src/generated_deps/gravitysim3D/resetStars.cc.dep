@@ -1,0 +1,9 @@
+gravitysim3D/resetStars.o: gravitysim3D/resetStars.cc \
+ gravitysim3D/gravitysim3D.ih.gch gravitysim3D/gravitysim3D.h \
+ gravitysim3D/../utils/utils.h gravitysim3D/../utils/raytracing/triple.h \
+ gravitysim3D/../utils/raytracing/../json/json_fwd.h
+gravitysim3D/gravitysim3D.ih:
+gravitysim3D/gravitysim3D.h:
+gravitysim3D/../utils/utils.h:
+gravitysim3D/../utils/raytracing/triple.h:
+gravitysim3D/../utils/raytracing/../json/json_fwd.h:

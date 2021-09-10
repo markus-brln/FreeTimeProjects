@@ -1,0 +1,14 @@
+controller/controller.ih.gch: controller/controller.ih \
+ controller/controller.h controller/../gravitysim3D/gravitysim3D.h \
+ controller/../gravitysim3D/../utils/utils.h \
+ controller/../gravitysim3D/../utils/raytracing/triple.h \
+ controller/../gravitysim3D/../utils/raytracing/../json/json_fwd.h \
+ controller/../view3D/view3D.h \
+ controller/../view3D/../gravitysim3D/gravitysim3D.h
+controller/controller.h:
+controller/../gravitysim3D/gravitysim3D.h:
+controller/../gravitysim3D/../utils/utils.h:
+controller/../gravitysim3D/../utils/raytracing/triple.h:
+controller/../gravitysim3D/../utils/raytracing/../json/json_fwd.h:
+controller/../view3D/view3D.h:
+controller/../view3D/../gravitysim3D/gravitysim3D.h:

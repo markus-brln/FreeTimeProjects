@@ -1,0 +1,10 @@
+#include "view3D.h"
+#include <../SFML/Graphics.hpp>
+#include "../utils/raytracing/hit.h"
+#include "../utils/raytracing/object.h"
+#include "../utils/raytracing/quad.h"
+#include "../utils/raytracing/ray.h"
+#include "../utils/raytracing/triple.h"
+#include "../utils/raytracing/vertex.h"
+
+
