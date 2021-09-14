@@ -1,0 +1,17 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\GameEngineProject\\SFML-2.5.1\\include",
+    "\\out\\build\\x64-Debug\\.cmake\\api",
+    "\\out\\build\\x64-Debug\\.cmake\\api\\v1",
+    "\\out\\build\\x64-Debug\\.cmake\\api\\v1\\query",
+    "\\out\\build\\x64-Debug\\GameEngineProject\\CMakeFiles",
+    "\\out\\build\\x64-Debug\\GameEngineProject\\CMakeFiles\\GameEngineProject.dir",
+    "\\out\\build\\x64-Debug\\Testing\\Temporary",
+    "\\out\\install",
+    "\\out\\install\\x64-Debug",
+    "\\out\\install\\x64-Debug\\bin"
+  ],
+  "SelectedNode": "\\GameEngineProject",
+  "PreviewInSolutionExplorer": false
+}
