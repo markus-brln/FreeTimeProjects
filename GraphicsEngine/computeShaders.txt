@@ -1,0 +1,3 @@
+https://community.arm.com/developer/tools-software/graphics/b/blog/posts/get-started-with-compute-shaders
+
+https://github.com/jakubcerveny/gl-compute

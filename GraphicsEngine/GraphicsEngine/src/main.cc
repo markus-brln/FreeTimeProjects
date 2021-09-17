@@ -104,7 +104,6 @@ int main()
     sf::Clock clock;
 
 
-
     // run the main loop
     bool running = true;
     while (running)
