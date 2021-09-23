@@ -1,8 +1,8 @@
 from numba import cuda
 
-SIZE = (700, 700)
-MAX_ITER = 200
-N_COLOR_VAR = 2
+SIZE = (500, 500)
+MAX_ITER = 1500
+N_COLOR_VAR = 3
 
 
 

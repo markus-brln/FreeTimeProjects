@@ -56,7 +56,11 @@ class View:
                     image[x, y, 0] = int(255 * (1 - math.sin(0.05 * pixel_value)) / 2)
                     image[x, y, 1] = int(255 * (1 - math.cos(0.3 * pixel_value)) / 2)
                     image[x, y, 2] = int(255 * (1 - math.cos(0.15 * pixel_value)) / 2)
-
+                if coloring_var % N_COLOR_VAR == 2:
+                    Zn = math.sqrt(Re * Re + Im * Im)
+                    image[x, y, 0] = pixel_value + 50 - 50 * (math.log(2) / Zn ) / math.log(2)
+                    image[x, y, 1] = pixel_value / 2 + 50 - 50 * (math.log(2) / (Zn*0.5) ) / math.log(2)
+                    image[x, y, 2] = pixel_value + 50 - 50 * (math.log(2) / Zn ) / (0.8 * math.log(2))
 
 
 

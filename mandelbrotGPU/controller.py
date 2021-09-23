@@ -51,8 +51,10 @@ class Controller:
         keys = pg.key.get_pressed()
 
         if keys[pg.K_BACKSPACE]:
-            self.view.camera_pos[0] = -0.0452407411
-            self.view.camera_pos[1] = 0.9868162204352258
+            #self.view.camera_pos[0] = -0.0452407411
+            #self.view.camera_pos[1] = 0.9868162204352258
+            self.view.camera_pos[0] = 0.001643721971153
+            self.view.camera_pos[1] = 0.822467633298876
             self.view.zoom = 1
 
         if keys[pg.K_UP]:
