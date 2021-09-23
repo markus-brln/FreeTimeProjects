@@ -1,0 +1,2 @@
+General implementation of MVC (model-view-controller) pattern in PyGame.
+Controller's run() loop calls view to construct image from its model.
