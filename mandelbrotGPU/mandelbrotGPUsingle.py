@@ -1,11 +1,10 @@
-
+# from https://notebook.community/arasdar/DL/impl-dl/etc/misc3/numba-cuda-gpu-example
 from numba import cuda
 from numba import *
 import numpy as np
 from pylab import imshow, show
 from timeit import default_timer as timer
 
-#@autojit
 def mandel(x, y, max_iters):
   """
     Given the real and imaginary parts of a complex number,

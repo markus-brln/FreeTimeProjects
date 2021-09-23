@@ -1,9 +1,10 @@
 from model import Model
 from view import View
 from utils import *
-
+import time
 import pygame as pg
 import numpy as np
+import os
 
 class Controller:
     def __init__(self, model=Model, view=View):
@@ -12,37 +13,33 @@ class Controller:
 
         self.running = True
 
-        self.image = np.zeros(shape=(SIZE[1], SIZE[0], 3))
-        for x in range(SIZE[0]):
-            for y in range(SIZE[1]):
-                self.image[y][x] = (x, y, 0)
+
 
     def run(self):
         pg.init()
-        screen = pg.display.set_mode(SIZE)
+
+        screen = pg.display.set_mode(SIZE, pg.RESIZABLE)
         clock = pg.time.Clock()
 
-        #colors = np.array([[120, 250, 90], [250, 90, 120], [255, 255, 255]])
-        #picture = np.random.randint(3, size=(20, 20))
-        #surface = pg.surfarray.make_surface(colors[picture])
-        #surface = pg.surfarray.make_surface(self.image)
-        #surface = pg.transform.scale(surface, SIZE)  # Scaled a bit.
-        iter = 0
         while self.running:
-            iter = iter + 1
+            start = time.time()
             self.handle_events()
             self.handle_key_presses()
-            screen.fill((0, 0, 0))
+
+            #print("handling events: ", time.time() - start)
+            #screen.fill((0, 0, 0))
             #for x in range(SIZE[0]):
             #    for y in range(SIZE[1]):
             #        surface.set_at((x, y), (x, y, 0))
 
-            self.view.construct_image(self.image, iter)
-            surface = pg.surfarray.make_surface(self.image)
+            #self.image = self.view.construct_image(self.image)
+            surface = pg.surfarray.make_surface(self.view.construct_image())
+            #print("make surface: ", time.time() - start)
             screen.blit(surface, (0, 0))
 
             pg.display.flip()
-            clock.tick(30)
+            #print("blit+flip: ", time.time() - start)
+            #clock.tick(60)
 
 
     def handle_events(self):
@@ -52,10 +49,29 @@ class Controller:
 
     def handle_key_presses(self):
         keys = pg.key.get_pressed()
-        if keys[pg.K_LEFT]:
-            print("hi")
-        if keys[pg.K_RIGHT]:
-            print("hmm")
 
+        if keys[pg.K_BACKSPACE]:
+            self.view.camera_pos[0] = -0.0452407411
+            self.view.camera_pos[1] = 0.9868162204352258
+            self.view.zoom = 1
+
+        if keys[pg.K_UP]:
+            self.view.camera_pos[1] -= 0.1 / self.view.zoom
+        if keys[pg.K_DOWN]:
+            self.view.camera_pos[1] += 0.1 /  self.view.zoom
+        if keys[pg.K_RIGHT]:
+            self.view.camera_pos[0] += 0.1 / self.view.zoom
+        if keys[pg.K_LEFT]:
+            self.view.camera_pos[0] -= 0.1 / self.view.zoom
+        if keys[pg.K_q]:
+            self.view.zoom = self.view.zoom * 1.1
+        if keys[pg.K_e]:
+            self.view.zoom = self.view.zoom / 1.1
+        if keys[pg.K_PLUS] or keys[pg.K_KP_PLUS]:
+            self.view.coloring_var += 1
+        if keys[pg.K_MINUS] or keys[pg.K_KP_MINUS]:
+            self.view.coloring_var -= 1
+        if keys[pg.K_ESCAPE]:
+            self.running = False
 
 
