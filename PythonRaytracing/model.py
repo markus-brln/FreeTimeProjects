@@ -3,15 +3,15 @@ from utils import *
 
 
 class Model:
-    cam_pos_init = np.zeros(3)
-    cam_dir_init = np.array([0, 0, -1])
+    cam_pos_init = np.zeros(3)              # x,y,z position of camera
+    cam_rot_init = np.zeros(3)              # rotation along x,y,z axes
     shadows = 0
     max_recursion_depth = 1
 
     def __init__(self, scene_path):
         self.scene_info = self.load_scene_info(scene_path)
         self.lights = self.load_lights(scene_path)
-        self.objets = self.load_objects(scene_path)
+        self.objects = self.load_objects(scene_path)
 
     def load_scene_info(self, scene_path):
         # eye,    shadows_on, max_recursion_depth
@@ -20,12 +20,10 @@ class Model:
         return scene_info
 
     def load_lights(self, scene_path):
-                       # [LIGHT,    R, G, B, x, y, z]
-        light1 = np.array([ObjectTypes.LIGHT, 1, 1, 1, 0, 500, 0])
+                        # [x, y,   z, R, G, B]
+        light1 = np.array([0, 500, 0, 1, 1, 1])
 
-                        # n_lights, lights_data
         lights = [light1]
-
         raw_lights = [len(lights)]
 
         for light in lights:
@@ -37,18 +35,20 @@ class Model:
         return raw_lights
 
     def load_objects(self, scene_path):
-        objects = list()
         #triangle = np.ndarray([ObjectTypes.TRIANGLE,100, -100, -100, -100, -100, -100, -100, 100, -100])
         #gpu_triangle = cuda.to_device(triangle)
                         # [SPHERE,   R, G, B, ka, kd, ks, n, texture_nr, radius, x, y, z]
-        sphere = np.array([ObjectTypes.SPHERE, 0.5, 0.5, 0, 0.3, 0.3, 0.3, 1, 0, 50, 0, 0, -200])
+        sphere1 = np.array([ObjectTypes.SPHERE.value, 0.5, 0.5, 0, 0.3, 0.3, 0.3, 1, 0, 50, 0, 0, -200])
 
-        # TODO do like for lights raw data
-        #gpu_sphere = cuda.to_device(sphere)
-        print(sphere)
-        objects.append(sphere)
+        objects = [sphere1]
 
-        return objects
+        raw_objects = [len(objects)]        # the first element of the array is the amount of objects in the scene
+
+        for obj in objects:
+            for data_point in obj:
+                raw_objects.append(data_point)
+
+        return np.array(raw_objects)
 
 
     def scene_info(self):

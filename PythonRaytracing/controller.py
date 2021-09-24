@@ -7,7 +7,7 @@ import numpy as np
 import os
 
 class Controller:
-    def __init__(self, model=Model, view=View):
+    def __init__(self, model, view):
         self.model = model
         self.view = view
 
