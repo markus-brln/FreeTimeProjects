@@ -10,16 +10,19 @@ class Controller:
     def __init__(self, model, view):
         self.model = model
         self.view = view
-
+        pg.init()
+        self.clock = pg.time.Clock()
+        self.font = pg.font.SysFont("Arial", 18)
         self.running = True
 
+    def update_fps(self):
+        fps = str(int(self.clock.get_fps()))
+        fps_text = self.font.render(fps, True, pg.Color("coral"))
+        return fps_text
 
 
     def run(self):
-        pg.init()
-
         screen = pg.display.set_mode(SIZE, pg.RESIZABLE)
-        clock = pg.time.Clock()
 
         while self.running:
             start = time.time()
@@ -36,10 +39,10 @@ class Controller:
             surface = pg.surfarray.make_surface(self.view.construct_image())
             #print("make surface: ", time.time() - start)
             screen.blit(surface, (0, 0))
-
+            screen.blit(self.update_fps(), (10, 0))
             pg.display.flip()
             #print("blit+flip: ", time.time() - start)
-            #clock.tick(60)
+            self.clock.tick(20)
 
 
     def handle_events(self):
@@ -58,22 +61,31 @@ class Controller:
             self.view.camera_pos[2] = 0.0
             self.view.zoom = 1
 
-        if keys[pg.K_UP]:
-            self.view.camera_pos[1] -= 0.1 / self.view.zoom
-        if keys[pg.K_DOWN]:
-            self.view.camera_pos[1] += 0.1 /  self.view.zoom
-        if keys[pg.K_RIGHT]:
-            self.view.camera_pos[0] += 0.1 / self.view.zoom
-        if keys[pg.K_LEFT]:
-            self.view.camera_pos[0] -= 0.1 / self.view.zoom
+        if keys[pg.K_w]:
+            self.view.translate_cam(0, 0, -20.0 / self.view.zoom)
+        if keys[pg.K_s]:
+            self.view.translate_cam(0, 0, 20.0 / self.view.zoom)
+        if keys[pg.K_a]:
+            self.view.translate_cam(-20.0 / self.view.zoom, 0, 0)
+        if keys[pg.K_d]:
+            self.view.translate_cam(20.0 / self.view.zoom, 0, 0)
         if keys[pg.K_q]:
-            self.view.zoom = self.view.zoom * 1.1
+            self.view.translate_cam(0, 20.0 / self.view.zoom, 0)
         if keys[pg.K_e]:
-            self.view.zoom = self.view.zoom / 1.1
-        if keys[pg.K_PLUS] or keys[pg.K_KP_PLUS]:
-            self.view.coloring_var += 1
-        if keys[pg.K_MINUS] or keys[pg.K_KP_MINUS]:
-            self.view.coloring_var -= 1
+            self.view.translate_cam(0, -20.0 / self.view.zoom, 0)
+        if keys[pg.K_KP_PLUS]:
+            self.view.multiply_zoom(1.1)
+        if keys[pg.K_KP_MINUS]:
+            self.view.multiply_zoom(0.9)
+        if keys[pg.K_UP]:
+            self.view.rotate_cam(0.05, 0.0, 0.0)
+        if keys[pg.K_DOWN]:
+            self.view.rotate_cam(-0.05, 0.0, 0.0)
+        if keys[pg.K_RIGHT]:
+            self.view.rotate_cam(0.0, -0.05, 0.0)
+        if keys[pg.K_LEFT]:
+            self.view.rotate_cam(0.0, 0.05, 0.0)
+
         if keys[pg.K_ESCAPE]:
             self.running = False
 
