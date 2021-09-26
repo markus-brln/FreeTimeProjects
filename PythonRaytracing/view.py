@@ -23,18 +23,27 @@ class View:
         blockdim = (32, 8)
         griddim = (32, 16)
 
-        start = timer()
+        #start = timer()
 
         down = np.array([0.0, -1.0, 0.0])
         right = np.array([1.0, 0.0, 0.0])
 
         down = rotate_vector(down, self.cam_rot[0], self.cam_rot[1], 0.0)
         right = rotate_vector(right, self.cam_rot[0], self.cam_rot[1], 0.0)
+
+        #down = normalize_vec(down[0], down[1], down[2])
+        #right = normalize_vec(right[0], right[1], right[2])
+
         #print("cam_rot: ", self.cam_rot)
         #print("down right: ", down, right)
         cam_dir = np.cross(right, down)
 
+        #print("right down cam: ", right, down, cam_dir)
+
         screen_centre = self.cam_pos + cam_dir * SIZE[1] * self.zoom
+
+        #print("screen_centre: ", screen_centre)
+        #print("cam rot: ", self.cam_rot)
         #print(down, right, cam_dir, screen_centre, type(screen_centre))
 
         #print(self.cam_pos, self.cam_dir, self.zoom, self.model.lights, self.model.objects)
@@ -49,9 +58,9 @@ class View:
                                                   cuda.to_device(right),
                                                   cuda.to_device(screen_centre))
 
-        dt = timer() - start
+        #dt = timer() - start
 
-        print("Image created on GPU in %f s" % dt)
+        #print("Image created on GPU in %f s" % dt)
         return self.gpu_img.copy_to_host()
 
     @staticmethod
@@ -83,7 +92,9 @@ class View:
 
 
     def translate_cam(self, x, y, z):
-        self.cam_pos += [x, y, z]
+        direction = (x, y, z)
+        self.cam_pos += rotate_vector(direction, self.cam_rot[0], self.cam_rot[1], self.cam_rot[2])
+
 
     def rotate_cam(self, x, y, z):
         self.cam_rot[0] += x

@@ -1,0 +1,5 @@
+26 September 2021
+- had issues with perspective (warping, disappearing sphere object)
+- let rotateVector() operate on copies and returning those to fix the problem
+- moral of the story: pay attention to when python copies/passes references
+- benchmark: 1 sphere at -100, radius 100, no shadows, lights, just intersection -> 40 fps, 17% GPU, 28% CPU

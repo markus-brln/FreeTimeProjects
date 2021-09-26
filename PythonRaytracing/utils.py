@@ -60,7 +60,8 @@ def rotate_vector(vec, x_rot, y_rot, z_rot):
     #|1     0           0| |x|   |        x        |   |x'|
     #|0   cos θ    −sin θ| |y| = |y cos θ − z sin θ| = |y'|
     #|0   sin θ     cos θ| |z|   |y sin θ + z cos θ|   |z'|
-    vecCopy = vec
+    vec = np.copy(vec)
+    vecCopy = np.copy(vec)
     # vec.x = same
     vec[1] = vecCopy[1] * math.cos(x_rot) - vecCopy[2] * math.sin(x_rot)
     vec[2] = vecCopy[1] * math.sin(x_rot) + vecCopy[2] * math.cos(x_rot)
@@ -69,7 +70,7 @@ def rotate_vector(vec, x_rot, y_rot, z_rot):
     #| cos θ    0   sin θ| |x|   | x cos θ + z sin θ|   |x'|
     #|   0      1       0| |y| = |         y        | = |y'|
     #|−sin θ    0   cos θ| |z|   |−x sin θ + z cos θ|   |z'|
-    vecCopy = vec
+    vecCopy = np.copy(vec)
     vec[0] = vecCopy[0] * math.cos(y_rot) + vecCopy[2] * math.sin(y_rot)
     # vec.y = same
     vec[2] = -vecCopy[0] * math.sin(y_rot) + vecCopy[2] * math.cos(y_rot)
@@ -78,11 +79,12 @@ def rotate_vector(vec, x_rot, y_rot, z_rot):
     # |cos θ   −sin θ   0| |x|   |x cos θ − y sin θ|   |x'|
     # |sin θ    cos θ   0| |y| = |x sin θ + y cos θ| = |y'|
     # |  0       0      1| |z|   |        z        |   |z'|
-    vecCopy = vec
+    vecCopy = np.copy(vec)
     vec[0] = vecCopy[0] * math.cos(z_rot) - vecCopy[1] * math.sin(z_rot)
     vec[1] = vecCopy[0] * math.sin(z_rot) + vecCopy[1] * math.cos(z_rot)
     # vec.z = same
     return vec
+
 
 def solve_quadratic(a, b, c):
     discr = b * b - 4.0 * a * c

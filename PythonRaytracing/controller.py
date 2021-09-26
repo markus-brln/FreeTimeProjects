@@ -12,13 +12,16 @@ class Controller:
         self.view = view
         pg.init()
         self.clock = pg.time.Clock()
-        self.font = pg.font.SysFont("Arial", 18)
+        self.font = pg.font.SysFont("Arial", 10)
         self.running = True
 
-    def update_fps(self):
-        fps = str(int(self.clock.get_fps()))
-        fps_text = self.font.render(fps, True, pg.Color("coral"))
-        return fps_text
+    def update_screen_info(self):
+        cam_position = int(self.view.cam_pos[0]), int(self.view.cam_pos[1]), int(self.view.cam_pos[2])
+        info = str(int(self.clock.get_fps())) + \
+               " cam_pos: " + str(cam_position) + \
+               " zoom: " + str(round(self.view.zoom, 2))
+
+        return self.font.render(info, True, pg.Color("coral"))
 
 
     def run(self):
@@ -39,10 +42,10 @@ class Controller:
             surface = pg.surfarray.make_surface(self.view.construct_image())
             #print("make surface: ", time.time() - start)
             screen.blit(surface, (0, 0))
-            screen.blit(self.update_fps(), (10, 0))
+            screen.blit(self.update_screen_info(), (10, 0))
             pg.display.flip()
             #print("blit+flip: ", time.time() - start)
-            self.clock.tick(20)
+            self.clock.tick()
 
 
     def handle_events(self):
