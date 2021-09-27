@@ -45,7 +45,7 @@ class Controller:
             screen.blit(self.update_screen_info(), (10, 0))
             pg.display.flip()
             #print("blit+flip: ", time.time() - start)
-            self.clock.tick()
+            self.clock.tick(20)
 
 
     def handle_events(self):

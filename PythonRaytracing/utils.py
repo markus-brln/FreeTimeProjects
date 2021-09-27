@@ -2,7 +2,7 @@ import numpy as np
 from numba import cuda
 from enum import Enum
 import math
-import pygame as pg
+from objects.sphere import Sphere
 
 SIZE = (500, 500)
 RECURSION_DEPTH = 1
@@ -14,24 +14,6 @@ class ObjectTypes(Enum):
   SPHERE = 1   # [SPHERE,   R, G, B, ka, kd, ks, n, texture_nr, radius, x, y, z]
   QUAD = 2     # [QUAD,     R, G, B, ka, kd, ks, n, texture_nr, v00, ..., v32 (12 datapoints)]
 
-
-
-def mandel(x, y, max_iters):
-  """
-    Given the real and imaginary parts of a complex number,
-    determine if it is a candidate for membership in the Mandelbrot
-    set given a fixed number of iterations.
-  """
-  c = complex(x, y)
-  z = 0.0j
-  for i in range(max_iters):
-    z = z*z + c
-    if (z.real*z.real + z.imag*z.imag) >= 4:
-      return i
-
-  return max_iters
-
-gpu_mandel = cuda.jit(device=True)(mandel)
 
 def normalize_vec(x, y, z):
     length = math.sqrt(x * x + y * y + z * z)
@@ -46,11 +28,9 @@ def distance3D(t1, t2):
     return math.sqrt(pow(t1.x - t2.x, 2) + pow(t1.y - t2.y, 2) + pow(t1.z - t2.z, 2))
 # distance between 2 3D points
 
-
 def angle(a, b):
     return math.acos(np.dot(a,b)/(np.sqrt(a.dot(a)) * np.sqrt(b.dot(b))))
 # angle between 2 3D vectors
-
 
 def rotate_vector(vec, x_rot, y_rot, z_rot):
     # ASCII way of writing the matrices & vectors down taken from:
@@ -125,7 +105,7 @@ def intersect_sphere(cam_pos, ray_dir, objects, idx_obj_arr):
     # double b = 2.0 * ray.D.dot(L);
     b = 2.0 * (ray_dir[0] * line_vec[0] + ray_dir[1] * line_vec[1] + ray_dir[2] * line_vec[2])
     #  double c = L.dot(L) - r * r;
-    c = line_vec[0] * line_vec[0] + line_vec[1] * line_vec[1] + line_vec[2] * line_vec[2] - objects[idx_obj_arr + 9]
+    c = line_vec[0] * line_vec[0] + line_vec[1] * line_vec[1] + line_vec[2] * line_vec[2] - objects[idx_obj_arr + 9] * objects[idx_obj_arr + 9]
 
     t0, t1, solved_bool = gpu_solve_quadratic(a, b, c)
     normal_x, normal_y, normal_z, hit_bool = 0, 0, 0, False
@@ -149,14 +129,14 @@ def intersect_sphere(cam_pos, ray_dir, objects, idx_obj_arr):
 def cast_ray(cam_pos, ray_dir, objects):
     n_objects = objects[0]
     idx_obj_arr = 1
-    hit_dist = 10000000000              # get hit with closest distance
+    hit_dist = 10000000000                  # get hit with closest distance
     hit_recorded = False                    # ray hit any object at all?
     hit_obj_idx = 1                         # idx in objects array at which object can be found,
                                             # important for coloring
     min_hit_normal = (1, 0, 0)              # normal of hitpoint at closest obj
 
     for idx in range(n_objects):
-        if objects[idx_obj_arr] == 1:   # ObjectTypes.SPHERE.value
+        if objects[idx_obj_arr] == 1:       # ObjectTypes.SPHERE.value
             t0, normal_x, normal_y, normal_z, hit_bool = gpu_intersect_sphere(cam_pos, ray_dir, objects, idx_obj_arr)
             if hit_bool:
                 hit_recorded = True
@@ -164,8 +144,8 @@ def cast_ray(cam_pos, ray_dir, objects):
                     hit_dist = t0
                     hit_obj_idx = idx_obj_arr # object with closest hit
                     min_hit_normal = (normal_x, normal_y, normal_z)
+            idx_obj_arr += 13               # step through obj data array manually
 
-            idx_obj_arr += 13       # step through obj data array manually
 
     norm_x, norm_y, norm_z = min_hit_normal
     return norm_x, norm_y, norm_z, hit_dist, hit_recorded, hit_obj_idx
@@ -174,9 +154,39 @@ def trace(cam_pos, ray_dir, lights, objects, rec_depth):
 
     norm_x, norm_y, norm_z, hit_dist, hit_recorded, hit_obj_idx = gpu_cast_ray(cam_pos, ray_dir, objects)
 
-    if hit_recorded:
-        return 255, 255, 255
-    return 0, 0, 0
+    if not hit_recorded:
+        return 0, 0, 0
+
+    # [SPHERE,   R, G, B, ka, kd, ks, n, texture_nr, radius, x, y, z]
+
+    ka, kd, ks = 0, 0, 0
+    color = 0, 0, 0
+    if objects[hit_obj_idx] == 1:           # again dealing with a sphere
+        color = objects[hit_obj_idx + 1], objects[hit_obj_idx + 2], objects[hit_obj_idx + 3]
+        ka, kd, ks = objects[hit_obj_idx + 4], objects[hit_obj_idx + 5], objects[hit_obj_idx + 6]
+
+
+    hit_point = cam_pos[0] + hit_dist * ray_dir[0], cam_pos[1] + hit_dist * ray_dir[1], cam_pos[2] + hit_dist * ray_dir[2]
+    vector_v = -ray_dir[0], -ray_dir[1], -ray_dir[2]    # vector from hitpoint to eye
+    normal = (norm_x, norm_y, norm_z)                   # normal on hitpoint on the object
+
+    # The shading normal always points in the direction of the view,
+    # as required by the Phong illumination model.
+    if vector_v[0] * normal[0] + vector_v[1] * normal[1] + vector_v[2] * normal[2] >= 0.0:
+        shading_normal = norm_x, norm_y, norm_z
+    else:
+        shading_normal = -norm_x, -norm_y, -norm_z
+
+    # [get texture color]
+
+    color = ka * color[0], ka * color[1], ka * color[2]
+    #print(color[0], color[1], color[2])
+
+
+
+
+
+    return color
 
 
 

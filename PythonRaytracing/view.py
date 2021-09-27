@@ -81,6 +81,7 @@ class View:
                 #pixel = [pixel_x, pixel_y, pixel_z]
                 ray_dir = (pixel_x - cam_pos[0], pixel_y - cam_pos[1], pixel_z - cam_pos[2])
                 ray_dir = gpu_normalize_vec(ray_dir[0], ray_dir[1], ray_dir[2])
+
                 col_r, col_g, col_b = gpu_trace(cam_pos, ray_dir, lights, objects, RECURSION_DEPTH)
 
                 #Ray ray(eye, (pixel - eye).normalized());

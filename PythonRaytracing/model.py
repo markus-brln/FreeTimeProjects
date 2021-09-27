@@ -38,7 +38,7 @@ class Model:
         #triangle = np.ndarray([ObjectTypes.TRIANGLE,100, -100, -100, -100, -100, -100, -100, 100, -100])
         #gpu_triangle = cuda.to_device(triangle)
                         # [SPHERE,   R, G, B, ka, kd, ks, n, texture_nr, radius, x, y, z]
-        sphere1 = np.array([ObjectTypes.SPHERE.value, 0.5, 0.5, 0, 0.3, 0.3, 0.3, 1, 0, 100, 0, 0, -100])
+        sphere1 = np.array([ObjectTypes.SPHERE.value, 255, 255, 0, 0.3, 0.3, 0.3, 1, 0, 100, 0, 0, -200])
 
         objects = [sphere1]
 
