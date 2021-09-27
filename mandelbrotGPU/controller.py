@@ -13,8 +13,6 @@ class Controller:
 
         self.running = True
 
-
-
     def run(self):
         pg.init()
 
@@ -39,7 +37,7 @@ class Controller:
 
             pg.display.flip()
             #print("blit+flip: ", time.time() - start)
-            #clock.tick(60)
+            clock.tick(60)
 
 
     def handle_events(self):
@@ -73,7 +71,12 @@ class Controller:
             self.view.coloring_var += 1
         if keys[pg.K_MINUS] or keys[pg.K_KP_MINUS]:
             self.view.coloring_var -= 1
+        if keys[pg.K_n]:
+            self.view.mandel_power -= 0.05
+        if keys[pg.K_m]:
+            self.view.mandel_power += 0.05
         if keys[pg.K_ESCAPE]:
             self.running = False
+
 
 
