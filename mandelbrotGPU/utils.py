@@ -1,8 +1,8 @@
 from numba import cuda
 import cmath
 
-SIZE = (300, 300)
-MAX_ITER = 100
+SIZE = (600, 600)
+MAX_ITER = 200
 N_COLOR_VAR = 3
 
 
