@@ -4,7 +4,7 @@ from utils import *
 
 class Model:
     def __init__(self, size_x, size_y, img):
-        arr = np.zeros((size_x, size_y))
+        arr = np.zeros((size_x, size_y), dtype=np.uint8)
         #array[40:100][40:100] = 1
         #arr[2][2] = 1
         #arr[2][3] = 1
@@ -12,9 +12,23 @@ class Model:
         for x in range(len(img)):
             for y in range(len(img[0])):
                 arr[x,y] = img[x,y]
-        self.world2 = cuda.to_device(arr)
-
         self.world1 = cuda.to_device(arr)
+        self.world2 = cuda.to_device(arr)
+        self.init_world = arr
+
+
+    def reset_to_random_world(self):
+        img = np.random.randint(low=0, high=2, size=(SIZE[0], SIZE[1]), dtype=np.uint8)
+        img *= 255
+        self.world1 = cuda.to_device(img)
+        self.world2 = cuda.to_device(img)
+
+
+    def reset_to_init_world(self):
+        self.world1 = cuda.to_device(self.init_world)
+        self.world2 = cuda.to_device(self.init_world)
+
+        #self.upscaled_img = cuda.to_device(np.zeros((size_x * 2, size_y * 2)))
 
     @staticmethod
     @cuda.jit
@@ -39,8 +53,6 @@ class Model:
 
         for x in range(startX, width, gridX):
             for y in range(startY, height, gridY):
-        #for x in range(0, width, 1):
-            #for y in range(0, height, 1):
                 n_neighbours = 0
                 x_search_min = x - 1
                 x_search_max = x + 2
@@ -58,20 +70,19 @@ class Model:
 
                 for x_search in range(x_search_min, x_search_max):
                     for y_search in range(y_search_min, y_search_max):
-                        #print(x_search, y_search)
                         if not (x_search == x and y_search == y):
-                            if old_world[x_search][y_search] == 1:
+                            if old_world[x_search][y_search] == 255:
                                 n_neighbours += 1
-                #print("\n\n")
-                #print(x,y, n_neighbours)
-                if old_world[x][y] == 1:
+
+                if old_world[x][y] == 255:                  # treat as greyscale image
                     if n_neighbours == 2 or n_neighbours == 3:
-                        active_world[x][y] = 1
+                        active_world[x][y] = 255
                     else:
                         active_world[x][y] = 0
+
                 if old_world[x][y] == 0:
                     if n_neighbours == 3:
-                        active_world[x][y] = 1
+                        active_world[x][y] = 255
                     else:
                         active_world[x][y] = 0
 

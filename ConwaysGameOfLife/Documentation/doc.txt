@@ -7,3 +7,12 @@
    - If the cell is dead, then it springs to life only in the case
      that it has 3 live neighbors.
 
+- benchmarks:
+  - 285 fps, 300 size
+  - 72 fps, 300 size, upscale to 600
+  - ~400 fps, 300 size, no display -> screen update on CPU is bottleneck
+  - ~110 fps, 500 size, no upscaling
+
+ - changed arrays to np.uint8, trying to mitigate bottleneck of updating and
+   CPU-GPU data transfer -> 230 fps, 500 size, no upscaling
+
