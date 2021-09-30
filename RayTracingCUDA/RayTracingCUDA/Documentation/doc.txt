@@ -1,0 +1,8 @@
+30 September 2021
+
+- solution properties -> cuda c/c++ -> device -> 
+  code generation fill in compute_30,sm_30 instead of 35 
+  (compute capability 3.0 on my GTX750M)
+- NVIDIA CUDA 10.1 fits to my GPU driver of 725.something
+
+SFML setup:

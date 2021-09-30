@@ -1,0 +1,9 @@
+
+- thought I needed to install CUDA 10.1 instead of 10.2
+- CUDA version + min gpu driver list: https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#major-components
+
+- my GTX750M has compute capability 3.0, but I found in 
+  Solution Properties (right click in explorer) -> CUDA C/C++ -> Device -> Code generation
+  "compute_35,sm_35", changed it to "compute_30,sm_30", then it worked
+- nvidia gpu compute capability list: https://developer.nvidia.com/cuda-gpus
+
