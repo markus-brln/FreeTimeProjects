@@ -10,14 +10,20 @@ class Controller:
     def __init__(self, model=Model, view=View):
         self.model = model
         self.view = view
-
+        pg.init()
+        self.clock = pg.time.Clock()
+        self.font = pg.font.SysFont("Arial", 10)
         self.running = True
 
-    def run(self):
-        pg.init()
 
+    def update_screen_info(self):
+        info = "fps: " + str(int(self.clock.get_fps()))
+
+        return self.font.render(info, True, pg.Color("coral"))
+
+    def run(self):
         screen = pg.display.set_mode(SIZE, pg.RESIZABLE)
-        clock = pg.time.Clock()
+
 
         while self.running:
             start = time.time()
@@ -34,10 +40,10 @@ class Controller:
             surface = pg.surfarray.make_surface(self.view.construct_image())
             #print("make surface: ", time.time() - start)
             screen.blit(surface, (0, 0))
-
+            screen.blit(self.update_screen_info(), (int(SIZE[0] / 2), 0))
             pg.display.flip()
             #print("blit+flip: ", time.time() - start)
-            clock.tick(60)
+            self.clock.tick()
 
 
     def handle_events(self):

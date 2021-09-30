@@ -13,7 +13,7 @@ class View:
         self.model = model
         self.camera_pos = [np.float64(0.0), np.float64(0.0)]
         self.zoom = np.float64(1.0)
-        self.gpu_img = cuda.to_device(np.zeros(shape=(SIZE[1], SIZE[0], 3)))
+        self.gpu_img = cuda.to_device(np.zeros(shape=(SIZE[1], SIZE[0], 3), dtype=np.uint8))
         self.coloring_var = 0
         self.mandel_power = 2
 

@@ -1,7 +1,7 @@
 from numba import cuda
 import cmath
 
-SIZE = (600, 600)
+SIZE = (500, 500)
 MAX_ITER = 200
 N_COLOR_VAR = 3
 
@@ -20,8 +20,8 @@ def mandel(x, y, max_iters, mandel_power):
   z = 0.0j
   for i in range(max_iters):
     #z = cmath.exp(x) + c
-    z = pow(z, mandel_power) + c
-    #z = z*z + c
+    #z = pow(z, mandel_power) + c
+    z = z*z + c
     if (z.real*z.real + z.imag*z.imag) >= 4:
       return i
 
