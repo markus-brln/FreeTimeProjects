@@ -15,6 +15,24 @@ inline void gpuAssert(cudaError_t code, char* file, int line, bool abort = true)
 	}
 }
 
+__device__ void hello_device()
+{
+	printf("hello device\n");
+}
+
+__global__ void call_device_function()
+{
+	//int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
+	//if (tid < n)
+	//	a[tid] = 2;
+	hello_device();
+}
+
+__global__ void print_hello_device()
+{
+	printf("hello device\n");
+}
+
 
 __global__ void vectorAdd(int* a, int n)
 {
