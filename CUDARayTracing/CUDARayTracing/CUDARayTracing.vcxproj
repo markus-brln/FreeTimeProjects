@@ -128,11 +128,14 @@
     <ClCompile Include="controller\handlekeypresses.cc" />
     <ClCompile Include="controller\run.cc" />
     <ClCompile Include="model\model1.cc" />
+    <ClCompile Include="model\modeldestructor.cc" />
+    <ClCompile Include="triple\triple.cc" />
     <ClCompile Include="utils\utils.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="controller\controller.h" />
     <ClInclude Include="model\model.h" />
+    <ClInclude Include="triple\triple.h" />
     <ClInclude Include="utils\utils.h" />
   </ItemGroup>
   <ItemGroup>

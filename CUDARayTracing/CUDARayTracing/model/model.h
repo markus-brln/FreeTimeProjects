@@ -5,8 +5,9 @@
 #include "device_launch_parameters.h"
 
 #include "../utils/utils.h"
+#include "../triple/triple.h"
 #include "cuda_runtime.h"
-#include <vector>
+
 
 using namespace std;
 //vector vec;
@@ -14,9 +15,12 @@ using namespace std;
 class Model
 {
 	std::vector<unsigned char> d_pixels_host;	// pixel raw data, used to initialize sf::Image
+	unsigned char *d_pixels_device;
 	//unsigned char* d_pixels_host;
 	public:
 		Model();								// 1.cc
+		
+		~Model();
 
 		unsigned char* renderImage();
 

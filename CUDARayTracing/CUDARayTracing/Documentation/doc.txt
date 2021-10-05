@@ -29,5 +29,7 @@ SFML setup:
 - problems with calling a cuda function from outside main.cu, will try out some more in 
   \FreeTimeProjects\CUDA101Try
 - kernel functions should not be class members, no .ih files
+- ~400 FPS 300x300 with drawing each pixel on GPU, but always copying data to and from it
+- ~500 FPS 300x300 with model having pointer to GPU memory, only copy from GPU once image is done
 
 
