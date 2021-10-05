@@ -1,4 +1,5 @@
-#include "model.ih"
+#include "model.h"
+
 
 Model::Model()
 {

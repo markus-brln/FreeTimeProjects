@@ -1,34 +1,16 @@
-#include "model.ih"
-#include "device_launch_parameters.h"
-
-//vector vec;
-
-
-
-__global__ void callFun(unsigned char* dev_dat, size_t pixelNr, int NUM_BLOCKS, int NUM_THREADS)
-{
-	//int tid = (blockIdx.x * blockDim.x) + threadIdx.x;
-
-	// Boundary check
-	/*if (tid < pixelNr)
-	{
-		dev_dat[tid * 4] = 100;
-		dev_dat[tid * 4 + 3] = 255;
-	}*/
-	//manipulate_array << <NUM_BLOCKS, NUM_THREADS >> > (dev_dat, pixelNr);
-}
+#include "model.h"
 
 
 __global__ void manipulate_array(unsigned char* arr, size_t arr_size)
 {
-	//int tid = (blockIdx.x * blockDim.x) + threadIdx.x;	// Calculate global thread ID
+	int tid = (blockIdx.x * blockDim.x) + threadIdx.x;	// calculate global thread id
 
-	//// Boundary check
-	//if (tid < arr_size)
-	//{
-	//	arr[tid * 4] = 100;
-	//	arr[tid * 4 + 3] = 255;
-	//}
+	// boundary check
+	if (tid < arr_size)
+	{
+		arr[tid * 4] = 100;
+		arr[tid * 4 + 3] = 255;
+	}
 }
 
 
@@ -43,12 +25,12 @@ unsigned char* Model::renderImage()
 	}*/
 
 
-	int NUM_THREADS = 256;							// Threadblock size
+	int NUM_THREADS = 1024;							// Threadblock size
 	int NUM_BLOCKS = (pixelNr + NUM_THREADS - 1) / NUM_THREADS;	// Grid size
 
 
-	unsigned char *host_dat = d_pixels_host.data();
-	unsigned char * dev_dat;
+	unsigned char* host_dat = d_pixels_host.data();
+	unsigned char* dev_dat;
 	int bytes = sizeof(unsigned char) * pixelNr * 4;
 
 	cudaMalloc(&dev_dat, bytes);

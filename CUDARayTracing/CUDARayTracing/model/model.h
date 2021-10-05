@@ -2,6 +2,14 @@
 #define MODEL_H
 
 #include <SFML/Graphics.hpp>
+#include "device_launch_parameters.h"
+
+#include "../utils/utils.h"
+#include "cuda_runtime.h"
+#include <vector>
+
+using namespace std;
+//vector vec;
 
 class Model
 {

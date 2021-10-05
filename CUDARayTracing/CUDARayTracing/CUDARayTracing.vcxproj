@@ -103,11 +103,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CudaCompile Include="main.cu" />
+    <CudaCompile Include="model\renderimage.cu" />
   </ItemGroup>
   <ItemGroup>
     <None Include="controller\controller.ih" />
     <None Include="main.ih" />
-    <None Include="model\model.ih" />
     <None Include="openal32.dll" />
     <None Include="sfml-audio-2.dll" />
     <None Include="sfml-audio-d-2.dll" />
@@ -128,7 +128,6 @@
     <ClCompile Include="controller\handlekeypresses.cc" />
     <ClCompile Include="controller\run.cc" />
     <ClCompile Include="model\model1.cc" />
-    <ClCompile Include="model\renderImage.cu" />
     <ClCompile Include="utils\utils.cc" />
   </ItemGroup>
   <ItemGroup>
@@ -139,8 +138,6 @@
   <ItemGroup>
     <Font Include="fonts\jackInputMonospace.TTF" />
     <Font Include="fonts\RobotoMono-Regular.ttf" />
-    <Font Include="x64\Release\fonts\jackInputMonospace.TTF" />
-    <Font Include="x64\Release\fonts\RobotoMono-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Documentation\doc.txt" />

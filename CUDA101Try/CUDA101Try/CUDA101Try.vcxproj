@@ -81,10 +81,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CudaCompile Include="main.cu" />
+    <CudaCompile Include="myclass\myclassSource.cu" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="links.txt" />
     <Text Include="struggle.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="myclass\myclass.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

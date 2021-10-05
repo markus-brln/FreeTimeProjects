@@ -28,6 +28,6 @@ SFML setup:
 - template for cuda+sfml projects saved
 - problems with calling a cuda function from outside main.cu, will try out some more in 
   \FreeTimeProjects\CUDA101Try
-
+- kernel functions should not be class members, no .ih files
 
 
