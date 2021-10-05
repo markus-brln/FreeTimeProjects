@@ -6,3 +6,19 @@
 - NVIDIA CUDA 10.1 fits to my GPU driver of 725.something
 
 SFML setup:
+- put SFML in some directory, e.g. C:\SFML-2.5.1-64bit, 
+  configure include + linker input&lib dirs in solution properties
+- copy-paste SFML bin all around your solution directory until it works LOL
+
+4 October 2021
+- WARNING: in Debug mode, sf::Clock.getElapsedTime().asMicroseconds() does not work,
+  needs to be commented out!
+- enabled multi-processor compilation under Solution Properties -> C++ -> General
+- setup of Controller class, update loop in Controller::run()
+- will probably skip view in MVC pattern, model will simply
+  render its image, have to see how that works with CUDA
+- FPS display + moving average
+- ~100 FPS 1366x768 full-screen with just drawing a black sprite over and over
+- ~750 FPS 300x300
+
+

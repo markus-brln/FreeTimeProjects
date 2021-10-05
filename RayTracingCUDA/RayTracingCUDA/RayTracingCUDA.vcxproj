@@ -14,9 +14,21 @@
     <Text Include="Documentation\doc.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="controller\confuguresolarsystem.cc" />
+    <ClCompile Include="controller\controller1.cc" />
+    <ClCompile Include="controller\createText.cc" />
+    <ClCompile Include="controller\handleevent.cc" />
+    <ClCompile Include="controller\handlekeypresses.cc" />
+    <ClCompile Include="controller\run.cc" />
+    <ClCompile Include="main.cc" />
+    <ClCompile Include="model\model1.cc" />
+    <ClCompile Include="model\renderImage.cc" />
+    <ClCompile Include="utils\utils.cc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="controller\controller.ih" />
+    <None Include="main.ih" />
+    <None Include="model\model.ih" />
     <None Include="openal32.dll" />
     <None Include="sfml-audio-2.dll" />
     <None Include="sfml-audio-d-2.dll" />
@@ -51,9 +63,19 @@
     <None Include="x64\Release\sfml-window-2.dll" />
     <None Include="x64\Release\sfml-window-d-2.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="fonts\jackInputMonospace.TTF" />
+    <Font Include="fonts\RobotoMono-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="controller\controller.h" />
+    <ClInclude Include="model\model.h" />
+    <ClInclude Include="utils\utils.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1EEC596A-5BCF-40A3-9D41-65BCD4B01CBF}</ProjectGuid>
     <RootNamespace>RayTracingCUDA</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -88,7 +110,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(CudaToolkitIncludeDir);C:\SFML-2.5.1-64bit\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\SFML-2.5.1-64bit\include;%(AdditionalIncludeDirectories);$(CudaToolkitIncludeDir)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <AdditionalOptions>
+      </AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -100,10 +126,13 @@
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <CodeGeneration>compute_30,sm_30</CodeGeneration>
       <Include>C:\SFML-2.5.1\include</Include>
+      <AdditionalCompilerOptions>
+      </AdditionalCompilerOptions>
     </CudaCompile>
     <CudaLink>
       <AdditionalLibraryDirectories>C:\SFML-2.5.1-64bit\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-s.lib;sfml-window-s.lib;sfml-system-s.lib</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib</AdditionalDependencies>
+      <AdditionalOptions>-hello %(AdditionalOptions)</AdditionalOptions>
     </CudaLink>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -113,7 +142,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(CudaToolkitIncludeDir);C:\SFML-2.5.1-64bit\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\SFML-2.5.1-64bit\include;%(AdditionalIncludeDirectories);$(CudaToolkitIncludeDir)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <AdditionalOptions>
+      </AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -126,10 +159,13 @@
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <CodeGeneration>compute_30,sm_30</CodeGeneration>
+      <AdditionalCompilerOptions>
+      </AdditionalCompilerOptions>
     </CudaCompile>
     <CudaLink>
       <AdditionalLibraryDirectories>C:\SFML-2.5.1-64bit\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-s.lib;sfml-window-s.lib;sfml-system-s.lib</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib</AdditionalDependencies>
+      <AdditionalOptions>-hello %(AdditionalOptions)</AdditionalOptions>
     </CudaLink>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
