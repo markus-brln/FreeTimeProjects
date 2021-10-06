@@ -1,7 +1,11 @@
+#include <SFML/Graphics.hpp>
+#include "cuda_runtime.h"
+#include "device_launch_parameters.h"
+#include <iostream>
+#include <stdio.h>
+
 #include "model/model.h"
 #include "controller/controller.h"
 #include "utils/utils.h"
-#include <SFML/Graphics.hpp>
-#include <iostream>
 
 using namespace std;

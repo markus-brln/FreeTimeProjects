@@ -48,6 +48,8 @@ void Controller::run()
         d_window.draw(sprite);
         d_window.draw(text);
         d_window.display();
+
+        return;
         
     }
 

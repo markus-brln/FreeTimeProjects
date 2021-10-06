@@ -32,4 +32,7 @@ SFML setup:
 - ~400 FPS 300x300 with drawing each pixel on GPU, but always copying data to and from it
 - ~500 FPS 300x300 with model having pointer to GPU memory, only copy from GPU once image is done
 
-
+6 October 2021
+- copied raytracing classes from https://github.com/markus-brln/ComputerGraphicsCompetition2021
+- redesigned them to fit to CUDA
+- problems with object array and allocation on device

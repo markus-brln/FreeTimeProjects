@@ -2,6 +2,6 @@
 
 Model::~Model()
 {
-	cudaFree(d_pixels_device);
+	cudaFree(d_pixelsDevice);
 }
 // free host and device memory
