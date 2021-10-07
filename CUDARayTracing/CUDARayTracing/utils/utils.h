@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <windows.h>						// GetModuleFileName
+#include "cuda_runtime.h"
 
 #include "../raytracing/triple.h"
 
@@ -17,7 +18,7 @@ extern int SIZE_Y;
 
 
 string current_path_string_windows();
-bool quadratic(double a, double b, double c, double& x0, double& x1);
+bool quadratic_host(double a, double b, double c, double& x0, double& x1);
 double distance2D(double x1, double y1, double x2, double y2);
 double distance3D(Triple t1, Triple t2);
 double angle(Triple a, Triple b);

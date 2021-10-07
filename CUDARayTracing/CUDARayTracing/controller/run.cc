@@ -47,10 +47,9 @@ void Controller::run()
                                         // since whole screen is refreshed
         d_window.draw(sprite);
         d_window.draw(text);
-        d_window.display();
+        d_window.display();        
 
-        return;
-        
+        //return;
     }
 
     cout << "fpsAvrg: " << fpsAvrg;

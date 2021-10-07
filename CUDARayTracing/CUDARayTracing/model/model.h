@@ -8,21 +8,21 @@
 #include "../utils/utils.h"
 #include "../raytracing/triple.h"
 #include "../raytracing/hit.h"
-#include "../raytracing/objects/object.h"
-
+//#include "../raytracing/objects/object.h"
+#include "../raytracing/objects/obj.h"
 
 
 using namespace std;
-//vector vec;
+//vector vec; 
 
 class Model
 {
 	std::vector<unsigned char> d_pixelsHost;	// pixel raw data, used to initialize sf::Image
 	unsigned char *d_pixelsDevice;
 	//Object **d_objectsHost;						// all objects, no matter what type
-	std::vector<Object*> d_objectsHost;
-	Object *d_objectsDevice;					// GPU receives a copy
-	size_t n_objects;
+	//Object **d_objectsDevice;					// GPU receives a copy
+	Obj** d_d_obj = NULL;
+	int n_objects;
 
 	// CAMERA
 	Point d_eye;
@@ -31,11 +31,13 @@ class Model
 	double d_zoom;
 
 
-	//unsigned char* d_pixels_host;
 	public:
 		Model();								// 1.cc
 		
 		~Model();
+
+		void imageAlloc();
+		void objectAlloc();
 
 		unsigned char* renderImage();
 

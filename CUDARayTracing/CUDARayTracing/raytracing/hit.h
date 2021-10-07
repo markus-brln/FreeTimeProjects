@@ -22,7 +22,7 @@ class Hit
 
         CUDA_CALLABLE_MEMBER static Hit const NO_HIT()
         {
-            Hit no_hit{ 0, Vector{} , NULL};
+            Hit no_hit{ 100000, Vector{} , NULL};
             no_hit.hit = false;
             /*static Hit no_hit(std::numeric_limits<double>::quiet_NaN(),
                 Vector(std::numeric_limits<double>::quiet_NaN(),

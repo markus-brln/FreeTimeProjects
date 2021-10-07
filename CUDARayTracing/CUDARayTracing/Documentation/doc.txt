@@ -36,3 +36,15 @@ SFML setup:
 - copied raytracing classes from https://github.com/markus-brln/ComputerGraphicsCompetition2021
 - redesigned them to fit to CUDA
 - problems with object array and allocation on device
+
+7 October 2021
+- finally solved object initialization by following this post:
+  https://stackoverflow.com/questions/38978297/pointer-to-array-of-pointers-to-objects-in-cuda
+- all objects are in one class though (same size for cudaMemcpy()), 
+  will need to think of something once objects have many vertices, textures
+- annoying that implementation and definition have to be in the same .h files
+  (editing .h files doesn't cause correct recompilation until a source is changed...)
+- needed to replace std::swap in quadratic solver
+- ~400 FPS 300x300 only returning a different color when obj was hit
+- ~80 FPS 768x768, see  Documentation/01_begin_yellow_sphere_2021-10-07.mp4
+

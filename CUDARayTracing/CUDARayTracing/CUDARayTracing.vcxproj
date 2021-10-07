@@ -66,6 +66,7 @@
       <Include>C:\SFML-2.5.1-64bit\include</Include>
       <AdditionalCompilerOptions>
       </AdditionalCompilerOptions>
+      <GenerateRelocatableDeviceCode>false</GenerateRelocatableDeviceCode>
     </CudaCompile>
     <CudaLink>
       <AdditionalLibraryDirectories>C:\SFML-2.5.1-64bit\lib</AdditionalLibraryDirectories>
@@ -97,6 +98,7 @@
       <Include>C:\SFML-2.5.1-64bit\include</Include>
       <AdditionalCompilerOptions>
       </AdditionalCompilerOptions>
+      <GenerateRelocatableDeviceCode>false</GenerateRelocatableDeviceCode>
     </CudaCompile>
     <CudaLink>
       <AdditionalLibraryDirectories>C:\SFML-2.5.1-64bit\lib</AdditionalLibraryDirectories>
@@ -129,8 +131,10 @@
     <ClCompile Include="controller\handleevent.cc" />
     <ClCompile Include="controller\handlekeypresses.cc" />
     <ClCompile Include="controller\run.cc" />
+    <ClCompile Include="model\imagealloc.cc" />
     <ClCompile Include="model\model1.cc" />
     <ClCompile Include="model\modeldestructor.cc" />
+    <ClCompile Include="model\objectAlloc.cu" />
     <ClCompile Include="utils\utils.cc" />
   </ItemGroup>
   <ItemGroup>
@@ -138,7 +142,7 @@
     <ClInclude Include="model\model.h" />
     <ClInclude Include="raytracing\hit.h" />
     <ClInclude Include="raytracing\light.h" />
-    <ClInclude Include="raytracing\objects\object.h" />
+    <ClInclude Include="raytracing\objects\obj.h" />
     <ClInclude Include="raytracing\ray.h" />
     <ClInclude Include="raytracing\tracing.h" />
     <ClInclude Include="raytracing\triple.h" />

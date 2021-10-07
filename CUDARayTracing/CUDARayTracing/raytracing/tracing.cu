@@ -1,10 +1,4 @@
-#include "../utils/utils.h"
-#include "triple.h"
-#include "hit.h"
-#include "ray.h"
-#include "light.h"
-#include "objects/obj.h"
-#include "cuda_runtime.h"
+#include "tracing.h"
 
 
 __device__ Hit castRay(Ray const& ray, Obj** objects, size_t n_objects)
@@ -15,11 +9,10 @@ __device__ Hit castRay(Ray const& ray, Obj** objects, size_t n_objects)
     for (unsigned idx = 0; idx != n_objects; ++idx)
     {
         Hit hit(objects[idx]->intersect(ray));
-        if (hit.hit && hit.t < min_hit.t)
+        if (hit.t < min_hit.t)
         {
             min_hit = hit;
             min_hit.hitObj = objects[idx];
-            //printf("new obj found\n");
         }
     }
 
@@ -68,13 +61,13 @@ __device__ Color trace(Ray const& ray, unsigned depth, Obj** objects, int n_obje
     //	objects[0]->d_position.z);
 
     // No hit? Return background color.
-    if (!min_hit.hit)
+    if (!obj)
     {
         return Color(0.0, 0.0, 0.0);
     }
     else
     {
-        //printf("HIT\n");
+        printf("HIT\n");
         return Color{ 1, 1, 1 };
     }
 
