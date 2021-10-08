@@ -1,4 +1,5 @@
 #include "model.h"
+#include <stdlib.h>
 
 
 void Model::objectAlloc()
@@ -6,12 +7,12 @@ void Model::objectAlloc()
 	/********************************/
 	/* INITIALISE OBJ ARRAY ON HOST */
 	/********************************/
-	n_objects = 1;
+	n_objects = 50;
 	// Array of pointers to Objs
 	Obj* h_obj = new Obj[n_objects];
 	for (size_t idx = 0; idx < n_objects; ++idx)
 	{
-		h_obj[idx] = Obj{ Point{ 0, 0, -200.0 - 300.0 * idx }, 100 };       // Create
+		h_obj[idx] = Obj{ Point{ 100.0 * ((rand() % 10) - 5), 0, -200.0 - 300.0 * idx }, 100 };       // Create
 	}
 
 	/**************************************************/

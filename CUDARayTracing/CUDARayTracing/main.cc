@@ -5,11 +5,12 @@
 int SIZE_X = 768;
 int SIZE_Y = 768;
 
-
+ 
 __global__ void print_hello_device()
 {
 	printf("hello from global function\n");
 }
+
 
 
 int main()

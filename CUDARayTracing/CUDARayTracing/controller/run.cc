@@ -23,6 +23,8 @@ void Controller::run()
     text.setCharacterSize(10);
     text.setFillColor(sf::Color::White);
 
+    d_window.setFramerateLimit(300);
+
 
     while (d_window.isOpen())
     {

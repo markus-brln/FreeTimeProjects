@@ -3,6 +3,7 @@
 
 #include "cuda_runtime.h"
 #include "../ray.h"
+#include "../triple.h"
 
 class Obj
 {
@@ -16,12 +17,13 @@ class Obj
         };
         int d_objType;
 
+
         // Material data members
-        Color color;        // base color
-        double ka;          // ambient intensity
-        double kd;          // diffuse intensity
-        double ks;          // specular intensity
-        double n;           // exponent for specular highlight size
+        Triple d_color;        // base color
+        double ka = 0.1;          // ambient intensity
+        double kd = 0.2;          // diffuse intensity
+        double ks = 0.2;          // specular intensity
+        double n = 3;           // exponent for specular highlight size
         bool hasTexture = false;
         unsigned char* texture;
 
@@ -40,8 +42,10 @@ class Obj
 
 
         CUDA_CALLABLE_MEMBER Obj(Point const& spherePos, double SphereRadius,
+            Triple sphereColor = Triple{ 1.0, 1.0, 1.0 },
             Vector const& SphereAxis = Vector(0.0, 1.0, 0.0), double SphereAngle = 0.0)
             :
+            d_color(sphereColor),
             d_position(spherePos),
             d_radius(SphereRadius),
             d_axis(SphereAxis),

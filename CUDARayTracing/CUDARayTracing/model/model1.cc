@@ -10,6 +10,7 @@ Model::Model()
 {
 	imageAlloc();						// allocate memory on GPU
 	objectAlloc();
+	lightAlloc();
 }
 
 

@@ -6,6 +6,35 @@
 #include "objects/obj.h"
 #include "cuda_runtime.h"
 
+//__device__ double sqrt(double num)
+//{
+//    double sqrt = num / 2;
+//    double temp = 0.00001;
+//
+//    // Iterate until sqrt is different of temp, that is updated on the loop
+//    while (sqrt > temp) 
+//    {
+//        // initially 0, is updated with the initial value of 128
+//        // (on second iteration = 65)
+//        // and so on
+//        temp = sqrt;
+//
+//        // Then, replace values (256 / 128 + 128 ) / 2 = 65
+//        // (on second iteration 34.46923076923077)
+//        // and so on
+//        sqrt = (num / temp + temp) / 2;
+//    }
+//
+//    return sqrt;
+//}
+
+__device__ double distance3D_device(Triple t1, Triple t2)
+{
+    return sqrt(
+        (t1.x - t2.x) * (t1.x - t2.x) + 
+        (t1.y - t2.y) * (t1.y - t2.y) +
+        (t1.z - t2.z) * (t1.z - t2.z));
+}
 
 __device__ Hit castRay(Ray const& ray, Obj** objects, size_t n_objects)
 {
@@ -28,37 +57,37 @@ __device__ Hit castRay(Ray const& ray, Obj** objects, size_t n_objects)
 // provided in CG course, find hit with object, if any
 
 
-//bool lightObstructed(Light *light, Point const& hit, Vector const& normalFromObj)
-//{
-//    // Offset multiplier. Before casting a new ray from a hit point,
-//    // move the hit point in the direction of the normal with this offset
-//    // to prevent finding an intersection with the same object due to
-//    // floating point inaccuracies. This prevents shadow acne, among other problems.
-//    double const epsilon = 1E-3;
-//
-//    // from the hitpoint + some N dir to view
-//    Point hoveringHit = hit + normalFromObj * epsilon;
-//    Ray shadowRay = Ray{ hoveringHit, light->position - hoveringHit };
-//    pair<Object*, Hit> mainhit = castRay(shadowRay);
-//
-//
-//    if (!mainhit.first)                 // first == object pointer, nullptr if no hit
-//        return false;                   // No hit? No obstruction.
-//
-//    //if (mainhit.first->objComment == "Sun") // light not obstructed by Sun's sphere!
-//    //    return false;
-//
-//    Point objHitPoint = shadowRay.O + mainhit.second.t * shadowRay.D;
-//    if (distance3D(light->position, hoveringHit) < distance3D(objHitPoint, hoveringHit))
-//        return false;
-//
-//    return true;
-//}
-//// look whether the light source is obstructed from its origin to the point
-//// where it would hit the object
-//
+__device__ bool lightObstructed(Light *light, Point const& hit, Vector const& normalFromObj, Obj **objects, int n_objects)
+{
+    // Offset multiplier. Before casting a new ray from a hit point,
+    // move the hit point in the direction of the normal with this offset
+    // to prevent finding an intersection with the same object due to
+    // floating point inaccuracies. This prevents shadow acne, among other problems.
+    double const epsilon = 1E-3;
 
-__device__ Color trace(Ray const& ray, unsigned depth, Obj** objects, int n_objects)
+    // from the hitpoint + some N dir to view
+    Point hoveringHit = hit + normalFromObj * epsilon;
+    Ray shadowRay = Ray{ hoveringHit, light->position - hoveringHit };
+    Hit mainhit = castRay(shadowRay, objects, n_objects);
+
+
+    if (!mainhit.hitObj)                 // first == object pointer, nullptr if no hit
+        return false;                   // No hit? No obstruction.
+
+    //if (mainhit.first->objComment == "Sun") // light not obstructed by Sun's sphere!
+    //    return false;
+
+    Point objHitPoint = shadowRay.O + shadowRay.D * mainhit.t;
+    if (distance3D_device(light->position, hoveringHit) < distance3D_device(objHitPoint, hoveringHit))
+        return false;
+
+    return true;
+}
+// look whether the light source is obstructed from its origin to the point
+// where it would hit the object
+
+ 
+__device__ Color trace(Ray const& ray, unsigned recursionDepth, Obj** objects, int n_objects, Light **lights, int n_lights)
 {
     //printf("n_objects %d, object1radius: %f, posz %f\n", n_objects, objects[0]->d_radius, objects[0]->d_position.z);
     Hit min_hit = castRay(ray, objects, n_objects);
@@ -69,72 +98,83 @@ __device__ Color trace(Ray const& ray, unsigned depth, Obj** objects, int n_obje
 
     // No hit? Return background color.
     if (!min_hit.hit)
-    {
-        return Color(0.0, 0.0, 0.0);
-    }
-    else
-    {
-        //printf("HIT\n");
-        return Color{ 1, 1, 1 };
-    }
-
-    //Material const& material = obj->material;
-    //Point hit = ray.at(min_hit.t);
-    //Vector V = -ray.D;
-
-    //// Pre-condition: For closed objects, N points outwards.
-    //Vector N = min_hit.N;
-
-    //// The shading normal always points in the direction of the view,
-    //// as required by the Phong illumination model.
-    //Vector shadingN;
-    //if (N.dot(V) >= 0.0)
-    //    shadingN = N;
+        return Color{ 0.0, 0.0, 0.0 };
     //else
-    //    shadingN = -N;
+    //{
+    //    //printf("HIT\n");
+    //    return Color{ 1.0, 1.0, 1.0 };
+    //}
 
-    //// -------- Texture mapping code
-    //Color matColor;
-    //if (material.hasTexture) {
-    //    Vector uvVector = obj->toUV(hit);
-    //    matColor = material.texture.colorAt(uvVector.x, 1.0 - uvVector.y);
-    //    if (obj->isSkybox)                  // MB stop reflection etc if the 
-    //        return matColor;                // object is part of the skybox 
-    //                                        // as determined in json under "comment": "Skybox..."
-    //}
-    //else {
-    //    matColor = material.color;
-    //}
-    ////-----------
+    //Material const &material = obj->material;
+    Point hit = ray.at(min_hit.t);
+    Vector V = -ray.D;
+
+    // Pre-condition: For closed objects, N points outwards.
+    Vector N = min_hit.N;
+
+    // The shading normal always points in the direction of the view,
+    // as required by the Phong illumination model.
+    Vector shadingN;
+    if (N.dot(V) >= 0.0)
+        shadingN = N;
+    else
+        shadingN = -N;
+
+    // -------- Texture mapping code
+    Color matColor;
+    if (obj->hasTexture) {
+        //Vector uvVector = obj->toUV(hit);
+        //matColor = material.texture.colorAt(uvVector.x, 1.0 - uvVector.y);
+        //if (obj->isSkybox)                  // MB stop reflection etc if the 
+        //    return matColor;                // object is part of the skybox 
+        //                                    // as determined in json under "comment": "Skybox..."
+        matColor = obj->d_color;
+    }
+    else 
+    {
+        matColor = obj->d_color;
+    }
+    //-----------
 
     //// Add ambient once, regardless of the number of lights.
-    //Color color = material.ka * matColor;
+    Color color = matColor * obj->ka;
 
     //// Add diffuse and specular components.
     //for (auto const& light : lights)
-    //{
-    //    // OUR CODE BEGIN
-    //    if (renderShadows && lightObstructed(light, hit, shadingN))
-    //        continue;
-    //    // OUR CODE END
+    for (size_t idx = 0; idx < n_lights; ++idx)
+    {
+        // OUR CODE BEGIN
+        if (lightObstructed(lights[idx], hit, shadingN, objects, n_objects)) // && renderShadows
+            continue;
+        // OUR CODE END
 
-    //    Vector L = (light->position - hit).normalized();
+        Vector L = (lights[idx]->position - hit).normalized();
 
-    //    // Add diffuse.
-    //    double dotNormal = shadingN.dot(L);
-    //    double diffuse = std::max(dotNormal, 0.0);
-    //    color += diffuse * material.kd * light->color * matColor;
+        // Add diffuse.
+        double dotNormal = shadingN.dot(L);
+        double diffuse = dotNormal > 0.0 ? dotNormal : 0.0; //std::max(dotNormal, 0.0);
+        color += lights[idx]->color * matColor * diffuse * obj->kd;
 
-    //    // Add specular.
-    //    if (dotNormal > 0)
-    //    {
-    //        Vector reflectDir = reflect(-L, shadingN); // Note: reflect(..) is not given in the framework.
-    //        double specAngle = std::max(reflectDir.dot(V), 0.0);
-    //        double specular = std::pow(specAngle, material.n);
+        // Add specular.
+        if (dotNormal > 0)
+        {
+            Vector reflectDir = Vector{ -L }.reflect(shadingN);  // reflect(-L, shadingN); // Note: reflect(..) is not given in the framework.
+            double dot1 = reflectDir.dot(V);
+            double specAngle = dot1 > 0.0 ? dot1 : 0.0; //std::max(reflectDir.dot(V), 0.0);
 
-    //        color += specular * material.ks * light->color;
-    //    }
-    //}
+            double specular = 1;
+            if (obj->n > 0 && obj->n == int(obj->n))
+            {
+                for (int power = 0; power < obj->n; ++power)
+                    specular *= specAngle;
+            }
+            //double specular = pow(specAngle, obj->n);// std::pow(specAngle, obj->n);
+
+            color +=  lights[idx]->color * specular * obj->ks;
+        }
+    }
+
+    return color;
 
     //if (depth > 0 and material.isTransparent)
     //{

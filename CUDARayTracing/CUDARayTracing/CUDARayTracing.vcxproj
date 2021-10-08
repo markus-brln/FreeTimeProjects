@@ -108,8 +108,8 @@
     </CudaLink>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CudaCompile Include="main.cu" />
-    <CudaCompile Include="model\renderimage.cu" />
+    <CudaCompile Include="main.cc" />
+    <CudaCompile Include="model\renderimage.cc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="controller\controller.ih" />
@@ -132,9 +132,10 @@
     <ClCompile Include="controller\handlekeypresses.cc" />
     <ClCompile Include="controller\run.cc" />
     <ClCompile Include="model\imagealloc.cc" />
+    <ClCompile Include="model\lightAlloc.cc" />
     <ClCompile Include="model\model1.cc" />
     <ClCompile Include="model\modeldestructor.cc" />
-    <ClCompile Include="model\objectAlloc.cu" />
+    <ClCompile Include="model\objectAlloc.cc" />
     <ClCompile Include="utils\utils.cc" />
   </ItemGroup>
   <ItemGroup>

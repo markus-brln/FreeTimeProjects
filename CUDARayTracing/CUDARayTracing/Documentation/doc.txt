@@ -48,3 +48,5 @@ SFML setup:
 - ~400 FPS 300x300 only returning a different color when obj was hit
 - ~80 FPS 768x768, see  Documentation/01_begin_yellow_sphere_2021-10-07.mp4
 
+8 October 2021
+- added light sources, uncommented+adapted code for diffuse and specular reflection

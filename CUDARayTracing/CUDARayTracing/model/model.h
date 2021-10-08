@@ -8,7 +8,7 @@
 #include "../utils/utils.h"
 #include "../raytracing/triple.h"
 #include "../raytracing/hit.h"
-//#include "../raytracing/objects/object.h"
+#include "../raytracing/light.h"
 #include "../raytracing/objects/obj.h"
 
 
@@ -22,7 +22,9 @@ class Model
 	//Object **d_objectsHost;						// all objects, no matter what type
 	//Object **d_objectsDevice;					// GPU receives a copy
 	Obj** d_d_obj = NULL;
+	Light** d_d_lights = NULL;
 	int n_objects;
+	int n_lights;
 
 	// CAMERA
 	Point d_eye;
@@ -33,13 +35,39 @@ class Model
 
 	public:
 		Model();								// 1.cc
-		
 		~Model();
 
 		void imageAlloc();
 		void objectAlloc();
+		void lightAlloc();
 
 		unsigned char* renderImage();
+
+		void translateEye(double x, double y, double z)
+		{
+			Vector deltaEye = Vector{ x,y,z };
+			rotateVector(deltaEye, d_eyeRotation.x, d_eyeRotation.y, d_eyeRotation.z);
+			d_eye += deltaEye;
+		}
+
+		void rotateEye(double x, double y, double z) 
+		{
+			d_eyeRotation.x += x;
+			d_eyeRotation.y += y;			
+			d_eyeRotation.z += z;
+		}
+
+
+		void zoomIn(double zoom)
+		{
+			d_zoom *= zoom;
+		}
+
+		double getZoom()
+		{
+			return d_zoom;
+		}
+
 
 		void initPixelData(int nPixels)
 		{											

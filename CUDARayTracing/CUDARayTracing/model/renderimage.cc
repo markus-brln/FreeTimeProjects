@@ -1,10 +1,10 @@
 #include "model.h"
 #include "../raytracing/tracing.h"
-#include <vector>
 
 
 __global__ void traceKernel(unsigned char* arr, size_t arr_size, Point screenCentre,
-	Point eye, Vector down, Vector right, double size_x, double size_y, Obj **d_d_obj, int n_objects)
+	Point eye, Vector down, Vector right, int size_x, int size_y, Obj **d_d_obj, int n_objects,
+	Light** lights, int n_lights)
 {
 	//printf("%d\n", n_objects);
 	//printf("screencenter %f %f %f\n down %f %f %f\n right %f %f %f\n", 
@@ -36,11 +36,11 @@ __global__ void traceKernel(unsigned char* arr, size_t arr_size, Point screenCen
 	// boundary check
 	if (tid < arr_size)
 	{
-		double x_coordinate = tid % int{ size_x };
-		double y_coordinate = tid / int{ size_y };
+		double x_coordinate = tid % size_x;
+		double y_coordinate = tid / size_y;
 		  
 		//printf("coords %f %f\n", x_coordinate, y_coordinate);
-
+		 
 		//if (y_coordinate < 50)
 		//	printf("%d %d\n", x_coordinate, y_coordinate);
 		// go from top left to bottom right, using the 3 rotated vectors
@@ -48,13 +48,13 @@ __global__ void traceKernel(unsigned char* arr, size_t arr_size, Point screenCen
 		//printf("%f %f %f\n", pixel.x, pixel.y, pixel.z);
 		Ray ray(eye, (pixel - eye).normalized());   // shoot ray through pixel
 		//printf("%f %f %f\n", ray.D.x, ray.D.y, ray.D.z);
-		Color col = trace(ray, 1, d_d_obj, n_objects);					// recursion depth == 1 
+		Color col = trace(ray, 1, d_d_obj, n_objects, lights, n_lights);					// recursion depth == 1 
 		//Color col{ 1, 1, 1 };
 		col.clamp();                                // some spots might be too bright
 		arr[tid * 4] = int(col.r * 255);
 		arr[tid * 4 + 1] = int(col.g * 255);
-		arr[tid * 4 + 1] = int(col.b * 255);
-		arr[tid * 4 + 3] = 255;  
+		arr[tid * 4 + 2] = int(col.b * 255);
+		arr[tid * 4 + 3] = 255;
 	}
 }
 
@@ -82,14 +82,14 @@ unsigned char* Model::renderImage()
 	// rotate around the camera for Z-rotation (unfinished)
 	// rotateVectorAroundVector(down, d_camera, eyeRotation.z);
 	// rotateVectorAroundVector(right, d_camera, eyeRotation.z);
-	   
+	      
 	 
 	Point screenCentre = d_eye + d_camera * SIZE_X * d_zoom;
 	 
 	//cout << down << right << d_camera << screenCentre << d_eye << d_eyeRotation << d_zoom << '\n';
-
+  
 	traceKernel << <NUM_BLOCKS, NUM_THREADS >> > (d_pixelsDevice, pixelNr, screenCentre, 
-		d_eye, down, right, SIZE_X, SIZE_Y, d_d_obj, n_objects);
+		d_eye, down, right, SIZE_X, SIZE_Y, d_d_obj, n_objects, d_d_lights, n_lights);
 	 
 
 	cudaMemcpy(d_pixelsHost.data(), d_pixelsDevice, bytes, cudaMemcpyDeviceToHost);

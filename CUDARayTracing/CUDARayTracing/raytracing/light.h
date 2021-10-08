@@ -11,14 +11,28 @@
 class Light
 {
 public:
-    Point const position;
-    Color const color;
+    Point position;
+    Color color;
+
+    CUDA_CALLABLE_MEMBER Light()
+        :
+        position(Point{ 0,0,0 }),
+        color(Color{ 1,1,1 })
+    {}
 
     CUDA_CALLABLE_MEMBER Light(Point const& pos, Color const& c)
         :
         position(pos),
         color(c)
     {}
+
+    CUDA_CALLABLE_MEMBER Light &operator=(Light const &other)
+    {
+        position = other.position;
+        color = other.color;
+
+        return *this;
+    }
 };
 
 #endif

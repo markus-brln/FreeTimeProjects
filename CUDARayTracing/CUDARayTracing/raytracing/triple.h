@@ -53,6 +53,15 @@ class Triple
 
         // --- Operators ---------------------------------------------------------------
 
+        CUDA_CALLABLE_MEMBER Triple& operator=(Triple const& other)
+        {
+            x = other.x;
+            y = other.y;
+            z = other.z;
+
+            return *this;
+        }
+
         CUDA_CALLABLE_MEMBER Triple Triple::operator+(Triple const& t) const
         {
             return Triple(x + t.x, y + t.y, z + t.z);
