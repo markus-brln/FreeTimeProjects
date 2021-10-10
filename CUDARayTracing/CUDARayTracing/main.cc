@@ -2,10 +2,10 @@
 
 //int SIZE_X = 1366;
 //int SIZE_Y = 768;
-int SIZE_X = 768;
-int SIZE_Y = 768;
+int SIZE_X = 500;
+int SIZE_Y = 500;
 
- 
+
 __global__ void print_hello_device()
 {
 	printf("hello from global function\n");

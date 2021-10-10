@@ -32,6 +32,9 @@ class Model
 	Vector d_eyeRotation;
 	double d_zoom;
 
+	// other variables
+	int d_recursionDepth = 0;
+
 
 	public:
 		Model();								// 1.cc
@@ -68,6 +71,13 @@ class Model
 			return d_zoom;
 		}
 
+		void changeRecursionDepth(int delta)
+		{
+			if (d_recursionDepth + delta > -1 && d_recursionDepth + delta < 3)
+				d_recursionDepth += delta;
+			else
+				cout << "Recursion depth cannot be lower than 0 or higher than 2.\n";
+		}
 
 		void initPixelData(int nPixels)
 		{											

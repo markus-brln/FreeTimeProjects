@@ -50,3 +50,7 @@ SFML setup:
 
 8 October 2021
 - added light sources, uncommented+adapted code for diffuse and specular reflection
+
+10 October 2021
+- added reflection and refraction + R,T as commands to change the recursionDepth
+- somehow the program doesn't like recursion depths > 2, so that is prevented in model.h

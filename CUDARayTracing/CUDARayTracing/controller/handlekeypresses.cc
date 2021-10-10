@@ -37,8 +37,6 @@ void Controller::handleKeyPresses()
         d_model.zoomIn(1.05);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract))
         d_model.zoomIn(0.95);
-
-
 }
 // this is for live input (allowing for multiple input actions at the same time),
 // nice tutorial about it: https://www.youtube.com/watch?v=hZ2WogmdLPo&t=76s

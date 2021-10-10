@@ -36,6 +36,20 @@ __device__ double distance3D_device(Triple t1, Triple t2)
         (t1.z - t2.z) * (t1.z - t2.z));
 }
 
+__device__ double angle_device(Triple const &a, Triple const &b)
+{
+    return std::acos(a.dot(b) / (a.length() * b.length()));
+}
+// angle between 2 3D vectors
+
+__device__ double pow_device(double num, size_t power)
+{
+    while (power-- != 0)
+        num *= num;
+
+    return num;
+}
+
 __device__ Hit castRay(Ray const& ray, Obj** objects, size_t n_objects)
 {
     // Find hit object and distance
@@ -174,83 +188,93 @@ __device__ Color trace(Ray const& ray, unsigned recursionDepth, Obj** objects, i
         }
     }
 
+    double const epsilon = 1E-3;
+
+    if (recursionDepth > 0 && obj->isTransparent)
+    {
+        //printf("hellooo");
+        // our code begin
+
+        // the object is transparent, and thus refracts and reflects light.
+        // use schlick's approximation to determine the ratio between the two.
+        double n_i = 1.0;           // refractive idx outside obj (like air)
+        double n_t = obj->nt;   // refractive index of obj
+
+        if (N.dot(V) < 0.0)         // light ray is exiting the obj
+        {
+            double swapnum = n_i;   // from obj -> air!
+            n_i = n_t;
+            n_t = swapnum;
+        }
+            
+
+
+        // reflection
+                                    // normal procedure like for opaque obj
+        Vector refldir = ray.D.reflect(shadingN); //reflect(ray.d, shadingn);
+        Ray reflectray{ hit + shadingN * epsilon, refldir };
+
+
+        // refraction
+        // see slide 71
+        Vector part1 = ((ray.D - shadingN * ray.D.dot(shadingN)) * n_i / n_t);
+        double undersqrt = 1 - (
+            pow_device(n_i, 2) * (
+                1 - pow_device(ray.D.dot(shadingN), 2)
+                ) / pow_device(n_t, 2)
+            );
+
+        Vector part2 = shadingN * sqrt(undersqrt);
+        Vector refrdir = part1 - part2;     // vector t on slide 71
+
+                            // "-" other dir because to the inside!!
+        Ray refractray{ hit - shadingN * epsilon, refrdir };
+
+
+        // ratio reflected/refracted
+
+        double k_r;                     // intensity multiplier of reflected ray
+        double k_t;                     // ~ of transmitted (refracted) ray          
+
+        if (undersqrt < 0 && N.dot(V) < 0.0)// total *internal* reflection, slide 71
+        {
+            k_r = 1;                        // slide  76
+            k_t = 0;
+        }
+        else
+        {
+            double k_r0 = (n_i - n_t) / (n_i + n_t) * (n_i - n_t) / (n_i + n_t);  // slide 76
+            double phi = angle_device(-ray.D, shadingN);   // between light and normal on obj
+
+
+            k_r = k_r0 + (1 - k_r0) * pow_device((1 - cos(phi)), 5);
+            k_t = 1 - k_r;
+        }
+
+        // give color slide 75
+        recursionDepth--;
+        color = color + trace(reflectray, recursionDepth, objects, n_objects, lights, n_lights) * k_r; // i = kr * i(p,r)
+        color = color + trace(refractray, recursionDepth, objects, n_objects, lights, n_lights) * k_t;
+
+    }
+    else if (recursionDepth > 0 && obj->ks > 0.0)
+    {
+        //printf("hellooo1");
+        // the object is not transparent, but opaque.
+        Vector reflectdirection = ray.D.reflect(shadingN); //reflect(ray.d, shadingN);
+
+        Point hoveringhit = hit + shadingN * epsilon;
+
+        Ray reflectray{ hoveringhit, reflectdirection };
+
+        // 2.2.4 don't forget to reduce depth
+        recursionDepth--;
+        color = color + trace(reflectray, recursionDepth, objects, n_objects, lights, n_lights) * obj->ks;
+
+        // our code end
+    }
+
+    //printf("hellooo2");
+
     return color;
-
-    //if (depth > 0 and material.isTransparent)
-    //{
-    //    // OUR CODE BEGIN
-
-    //    // The object is transparent, and thus refracts and reflects light.
-    //    // Use Schlick's approximation to determine the ratio between the two.
-    //    double n_i = 1.0;           // refractive idx outside obj (like air)
-    //    double n_t = material.nt;   // refractive index of obj
-
-    //    if (N.dot(V) < 0.0)         // light ray is exiting the obj
-    //        swap(n_i, n_t);         // from obj -> air!
-
-
-    //    // REFLECTION
-    //                                // normal procedure like for opaque obj
-    //    Vector reflDir = reflect(ray.D, shadingN);
-    //    Ray reflectRay{ hit + epsilon * shadingN, reflDir };
-
-
-    //    // REFRACTION
-    //    // see slide 71
-    //    Vector part1 = (n_i * (ray.D - ray.D.dot(shadingN) * shadingN) / n_t);
-    //    double underSqrt = 1 - (
-    //        pow(n_i, 2) * (
-    //            1 - pow(ray.D.dot(shadingN), 2)
-    //            ) / pow(n_t, 2)
-    //        );
-
-    //    Vector part2 = shadingN * sqrt(underSqrt);
-    //    Vector refrDir = part1 - part2;     // vector T on slide 71
-
-    //                        // "-" other dir because to the inside!!
-    //    Ray refractRay{ hit - epsilon * shadingN, refrDir };
-
-
-    //    // RATIO REFLECTED/REFRACTED
-
-    //    double k_r;                     // intensity multiplier of reflected ray
-    //    double k_t;                     // ~ of transmitted (refracted) ray          
-
-    //    if (underSqrt < 0 && N.dot(V) < 0.0)// total *internal* reflection, slide 71
-    //    {
-    //        k_r = 1;                        // slide  76
-    //        k_t = 0;
-    //    }
-    //    else
-    //    {
-    //        double k_r0 = pow((n_i - n_t) / (n_i + n_t), 2);  // slide 76
-    //        double phi = angle(-ray.D, shadingN);   // between light and normal on obj
-
-
-    //        k_r = k_r0 + (1 - k_r0) * pow((1 - cos(phi)), 5);
-    //        k_t = 1 - k_r;
-    //    }
-
-    //    // GIVE COLOR slide 75
-    //    depth--;
-    //    color = color + k_r * trace(reflectRay, depth); // I = kr * I(P,R)
-    //    color = color + k_t * trace(refractRay, depth);
-
-    //}
-    //else if (depth > 0 and material.ks > 0.0)
-    //{
-    //    // The object is not transparent, but opaque.
-    //    Vector reflectDirection = reflect(ray.D, shadingN);
-
-    //    Point hoveringHit = hit + 0.001 * shadingN;
-
-    //    Ray reflectRay{ hoveringHit, reflectDirection };
-
-    //    // 2.2.4 don't forget to reduce depth
-    //    color = color + obj->material.ks * trace(reflectRay, depth--);
-
-    //    // OUR CODE END
-    //}
-
-    //return color;
 }

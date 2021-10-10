@@ -1,10 +1,11 @@
 #include "model.h"
 #include "../raytracing/tracing.h"
+ 
 
 
 __global__ void traceKernel(unsigned char* arr, size_t arr_size, Point screenCentre,
 	Point eye, Vector down, Vector right, int size_x, int size_y, Obj **d_d_obj, int n_objects,
-	Light** lights, int n_lights)
+	Light** lights, int n_lights, int recursionDepth)
 {
 	//printf("%d\n", n_objects);
 	//printf("screencenter %f %f %f\n down %f %f %f\n right %f %f %f\n", 
@@ -48,7 +49,7 @@ __global__ void traceKernel(unsigned char* arr, size_t arr_size, Point screenCen
 		//printf("%f %f %f\n", pixel.x, pixel.y, pixel.z);
 		Ray ray(eye, (pixel - eye).normalized());   // shoot ray through pixel
 		//printf("%f %f %f\n", ray.D.x, ray.D.y, ray.D.z);
-		Color col = trace(ray, 1, d_d_obj, n_objects, lights, n_lights);					// recursion depth == 1 
+		Color col = trace(ray, recursionDepth, d_d_obj, n_objects, lights, n_lights);					// recursion depth == 1 
 		//Color col{ 1, 1, 1 };
 		col.clamp();                                // some spots might be too bright
 		arr[tid * 4] = int(col.r * 255);
@@ -89,7 +90,7 @@ unsigned char* Model::renderImage()
 	//cout << down << right << d_camera << screenCentre << d_eye << d_eyeRotation << d_zoom << '\n';
   
 	traceKernel << <NUM_BLOCKS, NUM_THREADS >> > (d_pixelsDevice, pixelNr, screenCentre, 
-		d_eye, down, right, SIZE_X, SIZE_Y, d_d_obj, n_objects, d_d_lights, n_lights);
+		d_eye, down, right, SIZE_X, SIZE_Y, d_d_obj, n_objects, d_d_lights, n_lights, d_recursionDepth);
 	 
 
 	cudaMemcpy(d_pixelsHost.data(), d_pixelsDevice, bytes, cudaMemcpyDeviceToHost);

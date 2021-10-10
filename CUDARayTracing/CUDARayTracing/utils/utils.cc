@@ -73,7 +73,7 @@ void rotateVectorAroundVector(Vector& vec, Vector const& axis, double angle)
 // using the Rodrigues' rotation formula:
 // https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
 
-__device__ bool quadratic_host(double a, double b, double c,
+bool quadratic_host(double a, double b, double c,
     double& x0, double& x1)
 {
     double discr = b * b - 4.0 * a * c;

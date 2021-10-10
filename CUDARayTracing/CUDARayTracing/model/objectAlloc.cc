@@ -7,13 +7,16 @@ void Model::objectAlloc()
 	/********************************/
 	/* INITIALISE OBJ ARRAY ON HOST */
 	/********************************/
-	n_objects = 50;
+	n_objects = 10;
 	// Array of pointers to Objs
 	Obj* h_obj = new Obj[n_objects];
 	for (size_t idx = 0; idx < n_objects; ++idx)
 	{
-		h_obj[idx] = Obj{ Point{ 100.0 * ((rand() % 10) - 5), 0, -200.0 - 300.0 * idx }, 100 };       // Create
+		Color sphereColor = { double(rand() % 10) / 10, double(rand() % 10) / 10, double(rand() % 10) / 10 };
+		h_obj[idx] = Obj{ Point{ 100.0 * ((rand() % 10) - 5), 0, -200.0 - 200.0 * idx }, 100, sphereColor };       // Create
 	}
+
+	h_obj[0] = Obj{ Point{ 0, -1000, -1000 }, 800 };
 
 	/**************************************************/
 	/* CREATE DEVICE VERSIONS AND STORE IN HOST ARRAY */

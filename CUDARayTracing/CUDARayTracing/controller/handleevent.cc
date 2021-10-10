@@ -17,7 +17,15 @@ void Controller::handleEvent(Event &event)
             }
             else
                 d_window.create(sf::VideoMode(SIZE_X, SIZE_Y), "Raytracing");
-            d_fullscreen = !d_fullscreen;
+            d_fullscreen = !d_fullscreen; 
+            break;
+        case (sf::Keyboard::R):             // Recursion depth
+            d_model.changeRecursionDepth(1);
+            break;
+        case (sf::Keyboard::T):
+            d_model.changeRecursionDepth(-1);
+            break;
+
             // Reset
         //case (sf::Keyboard::Backspace):
         //    d_raytracer.scene.getEye() = Vector{ 0, 0, 2000 };
