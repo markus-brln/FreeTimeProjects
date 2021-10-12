@@ -39,13 +39,15 @@ __global__ void traceKernel(unsigned char* arr, size_t arr_size, Point screenCen
 	{
 		double x_coordinate = tid % size_x;
 		double y_coordinate = tid / size_y;
+
+		double screen_ratio = double(size_x) / double(size_y);
 		  
 		//printf("coords %f %f\n", x_coordinate, y_coordinate);
 		 
 		//if (y_coordinate < 50)
 		//	printf("%d %d\n", x_coordinate, y_coordinate);
 		// go from top left to bottom right, using the 3 rotated vectors
-		Point pixel = screenCentre + right * (x_coordinate - size_x / 2) + down * (y_coordinate - size_y / 2);
+		Point pixel = screenCentre + right * (x_coordinate - size_x / 2) * screen_ratio + down * (y_coordinate - size_y / 2);
 		//printf("%f %f %f\n", pixel.x, pixel.y, pixel.z);
 		Ray ray(eye, (pixel - eye).normalized());   // shoot ray through pixel
 		//printf("%f %f %f\n", ray.D.x, ray.D.y, ray.D.z);

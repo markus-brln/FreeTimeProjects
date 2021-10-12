@@ -1,9 +1,9 @@
 #include "main.ih"
 
-//int SIZE_X = 1366;
-//int SIZE_Y = 768;
-int SIZE_X = 500;
-int SIZE_Y = 500;
+int SIZE_X = 1366;
+int SIZE_Y = 768;
+//int SIZE_X = 1000;
+//int SIZE_Y = 1000;
 
 
 __global__ void print_hello_device()

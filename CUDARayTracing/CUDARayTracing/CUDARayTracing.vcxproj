@@ -94,7 +94,7 @@
     </Link>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
-      <CodeGeneration>compute_30,sm_30</CodeGeneration>
+      <CodeGeneration>compute_61,sm_61</CodeGeneration>
       <Include>C:\SFML-2.5.1-64bit\include</Include>
       <AdditionalCompilerOptions>
       </AdditionalCompilerOptions>

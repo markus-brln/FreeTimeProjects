@@ -73,11 +73,15 @@ class Model
 
 		void changeRecursionDepth(int delta)
 		{
-			if (d_recursionDepth + delta > -1 && d_recursionDepth + delta < 3)
+			if (d_recursionDepth + delta > -1 && d_recursionDepth + delta < 4)
+			{
 				d_recursionDepth += delta;
+				cout << "recursion depth: " << d_recursionDepth << '\n';
+			}
 			else
 				cout << "Recursion depth cannot be lower than 0 or higher than 2.\n";
 		}
+		// on my GTX 1050 a recursion depth of >3 is not possible, for GTX750M it's 2
 
 		void initPixelData(int nPixels)
 		{											
