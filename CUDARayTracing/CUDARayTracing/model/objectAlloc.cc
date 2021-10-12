@@ -7,7 +7,7 @@ void Model::objectAlloc()
 	/********************************/
 	/* INITIALISE OBJ ARRAY ON HOST */
 	/********************************/
-	n_objects = 10;
+	n_objects = 20;
 	// Array of pointers to Objs
 	Obj* h_obj = new Obj[n_objects];
 	for (size_t idx = 0; idx < n_objects; ++idx)

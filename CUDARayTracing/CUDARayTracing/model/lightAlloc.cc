@@ -6,12 +6,14 @@ void Model::lightAlloc()
 	/********************************/
 	/* INITIALISE OBJ ARRAY ON HOST */
 	/********************************/
-	n_lights = 3;
+	n_lights = 5;
 	// Array of pointers to Objs
 	Light* h_light = new Light[n_lights];
 	for (size_t idx = 0; idx < n_lights; ++idx)
 	{
-		h_light[idx] = Light{ Point{ 0, 300, -200.0 - 300.0 * idx }, Color{ 0.2, 0.3, 0.6 } };       // Create
+		h_light[idx] = Light{ Point{ 0, 300, -200.0 - 500.0 * idx }, 
+			Color{ double(rand() % 10) / 15, double(rand() % 10) / 15, double(rand() % 10) / 15 } };       // Create
+			//Color{ 0.2, 0.3, 0.6 } };       // Create
 	}
 
 	/**************************************************/
