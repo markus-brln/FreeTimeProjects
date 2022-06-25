@@ -2,11 +2,12 @@ import glob
 import imageio
 
 anim_file = 'newgif.gif'
-imagenames = 'image*.jpg'
+image_names = 'image*.jpg'
 
-def make_GIF():
+
+def make_gif():
     with imageio.get_writer(anim_file, mode='I') as writer:
-        filenames = glob.glob(imagenames)
+        filenames = glob.glob(image_names)
         filenames = sorted(filenames)
         print("files that will be used: ")
         for filename in filenames:
@@ -25,4 +26,6 @@ def make_GIF():
         for j in range(2):
             writer.append_data(image)
 
-make_GIF()
+
+if __name__ == "__main__":
+    make_gif()

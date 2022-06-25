@@ -14,19 +14,21 @@
     - running the script like this will save a jpg every 50 training steps,
       which can then be made into a GIF with make_GIF.py
 """
+
 import tensorflow as tf
 import numpy as np
 import PIL.Image
 import time
 import matplotlib.pyplot as plt
-import IPython.display as display
+
+# import IPython.display as display
 
 # images will be loaded with this maximum length
 # big images may cause GPU memory issues
-max_dim = 64
+max_dim = 1920
 
-content_path = "YellowLabradorLooking.jpg"
-style_path = "VassilyKandinsky1913Composition7.jpg"
+content_path = 'YellowLabradorLooking.jpg'
+style_path = 'VassilyKandinsky1913Composition7.jpg'
 
 
 def imshow(image, title=None):
@@ -40,9 +42,9 @@ def imshow(image, title=None):
 
 
 def tensor_to_image(tensor):
-    tensor = tensor*255
+    tensor = tensor * 255
     tensor = np.array(tensor, dtype=np.uint8)
-    if np.ndim(tensor)>3:
+    if np.ndim(tensor) > 3:
         assert tensor.shape[0] == 1
         tensor = tensor[0]
     return PIL.Image.fromarray(tensor)
@@ -65,7 +67,7 @@ def load_img(path_to_img):
 
 
 def vgg_layers(layer_names):
-    """ Creates a vgg model that returns a list of intermediate output values."""
+    ''' Creates a vgg model that returns a list of intermediate output values.'''
     # Load our model. Load pretrained VGG, trained on imagenet data
     vgg = tf.keras.applications.VGG19(include_top=False, weights='imagenet')
     vgg.trainable = False
@@ -75,11 +77,12 @@ def vgg_layers(layer_names):
     model = tf.keras.Model([vgg.input], outputs)
     return model
 
+
 # gram matrix to derive the style through means and correlations across the different feature maps
 def gram_matrix(input_tensor):
     result = tf.linalg.einsum('bijc,bijd->bcd', input_tensor, input_tensor)
     input_shape = tf.shape(input_tensor)
-    num_locations = tf.cast(input_shape[1]*input_shape[2], tf.float32)
+    num_locations = tf.cast(input_shape[1] * input_shape[2], tf.float32)
     return result / num_locations
 
 
@@ -93,7 +96,7 @@ class StyleContentModel(tf.keras.models.Model):
         self.vgg.trainable = False
 
     def call(self, inputs):
-        """Expects float input in [0,1]"""
+        '''Expects float input in [0,1]'''
         inputs = inputs * 255.0
         preprocessed_input = tf.keras.applications.vgg19.preprocess_input(inputs)
         outputs = self.vgg(preprocessed_input)
@@ -115,17 +118,17 @@ class StyleContentModel(tf.keras.models.Model):
 
 
 def clip_0_1(image):
-  return tf.clip_by_value(image, clip_value_min=0.0, clip_value_max=1.0)
+    return tf.clip_by_value(image, clip_value_min=0.0, clip_value_max=1.0)
 
 
 def style_content_loss(outputs):
     style_outputs = outputs['style']
     content_outputs = outputs['content']
-    style_loss = tf.add_n([tf.reduce_mean((style_outputs[name]-style_targets[name])**2)
+    style_loss = tf.add_n([tf.reduce_mean((style_outputs[name] - style_targets[name]) ** 2)
                            for name in style_outputs.keys()])
     style_loss *= style_weight / num_style_layers
 
-    content_loss = tf.add_n([tf.reduce_mean((content_outputs[name]-content_targets[name])**2)
+    content_loss = tf.add_n([tf.reduce_mean((content_outputs[name] - content_targets[name]) ** 2)
                              for name in content_outputs.keys()])
     content_loss *= content_weight / num_content_layers
     loss = style_loss + content_loss
@@ -145,7 +148,7 @@ def train_step(image):
     image.assign(clip_0_1(image))
 
 
-def train(image, epochs=1, steps_per_epoch = 1):
+def train(image, epochs=1, steps_per_epoch=1):
     start = time.time()
     step = 0
     for n in range(epochs):
@@ -153,32 +156,31 @@ def train(image, epochs=1, steps_per_epoch = 1):
         for m in range(steps_per_epoch):
             step += 1
             train_step(image)
-            print(".", end='')
             # save intermediate results
-            if step%50==0:
+            if step % 50 == 0:
+                print(f'step {step}')
                 out = tensor_to_image(image)
-                out.save("image_step_{}.jpg".format(step))
+                out.save(f'image_step_{step}.jpg')
 
         # save+show current image every epoch
-        #out = tensor_to_image(image)
-        #out.save("image_step_{}.jpg".format(step))
-        #display.clear_output(wait=True)
-        #display.display(tensor_to_image(image))
-        print("Train step: {}".format(step))
-        print("time: {}".format(time.time()-new_start))
+        # out = tensor_to_image(image)
+        # out.save('image_step_{}.jpg'.format(step))
+        # display.clear_output(wait=True)
+        # display.display(tensor_to_image(image))
+        print('Train step: {}'.format(step))
+        print('time: {}'.format(time.time() - new_start))
 
     end = time.time()
-    print("Total time: {:.1f}".format(end - start))
+    print('Total time: {:.1f}'.format(end - start))
 
 
-if __name__=="__main__":
-
-    print("loading images")
+if __name__ == '__main__':
+    print('loading images')
     content_image = load_img(content_path)
     style_image = load_img(style_path)
 
     # pre-trained image classification network VGG19:
-    print("loading VGG19")
+    print('loading VGG19')
     vgg = tf.keras.applications.VGG19(include_top=False, weights='imagenet')
 
     # we will access the activations of that network to
@@ -197,7 +199,7 @@ if __name__=="__main__":
     num_style_layers = len(style_layers)
 
     style_extractor = vgg_layers(style_layers)
-    print("getting outputs")
+    print('getting outputs')
     style_outputs = style_extractor(style_image * 255)
 
     extractor = StyleContentModel(style_layers, content_layers)
@@ -218,8 +220,3 @@ if __name__=="__main__":
     total_variation_weight = 30
 
     train(image, epochs=10, steps_per_epoch=100)
-
-
-
-
-
