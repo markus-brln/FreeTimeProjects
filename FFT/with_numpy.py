@@ -36,7 +36,7 @@ def log_transform(image):
 
 
 if __name__ == '__main__':
-    data = load_image('box.png')
+    data = load_image('assets/box.png')
     bw_img = to_black_and_white(data)
     save_image(bw_img, 'bw_img')
 
